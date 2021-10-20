@@ -66,64 +66,42 @@ void loop() {
   x = analogRead(X_PIN_JOYSTICK);
   //elevator control
   y = analogRead(Y_PIN_JOYSTICK);
-  y = map(y, 0, 1023, 45, 135);
   
-  toRadio.servoRight = map(y+getPitchR(x), 0, 180, 180, 0);
-  toRadio.servoLeft = y+getPitchL(x);
-
-  Serial.print("Right Servo: ");
-  Serial.print(toRadio.servoRight);
-  Serial.print(" Left Servo: ");
-  Serial.println(toRadio.servoLeft);
-  
-  /*//pull up - both up 
-  if(y > 512 && x == 518){
-    y_radio = map(y, 512, 1023, 90, 135); 
-    toRadio.servoRight = y_radio;
-    toRadio.servoLeft = y_radio;
+  //if right
+  if(x > 518){
+    y = map(y, 0, 1023, 45, 135);
+    x = map(x, 518, 1023, 0, 45);
+    
+    //right servo = y + x
+    toRadio.servoRight = y + x;
+    //left servo = y-x
+    toRadio.servoLeft = y - x;
+    toRadio.servoLeft = map(toRadio.servoLeft, 0, 180, 180, 0);  
   }
-  //pull down - both down
-  else if(y < 512 && x == 518){
-    y_radio = map(y, 0, 512, 45, 90);
-    Serial.println("Yes");
-    toRadio.servoRight = y_radio;
-    toRadio.servoLeft = y_radio;
+  //if left
+  else if(x < 518){
+    y = map(y, 0, 1023, 45, 135);
+    x = map(x, 0, 518, 45, 0);
+    //right servo = y - x
+    toRadio.servoRight = y - x;
+    //left servo = y + x
+    toRadio.servoLeft = y + x;
+    toRadio.servoLeft = map(toRadio.servoLeft, 0, 180, 180, 0); 
   }
-  //roll right - right up
-  else if(y == 512 && x > 512){
-    x_radio = map(x, 512, 1023, 90, 135);
-    toRadio.servoRight = x_radio;
-    toRadio.servoLeft = 90;
+  //if 518
+  else {
+    toRadio.servoRight = map(y, 0, 1023, 45, 135);
+    toRadio.servoLeft = map(y, 0, 1023, 135, 45);
   }
-  //roll left - left up
-  else if(y == 512 && x < 512){
-    x_radio = map(x, 0, 512, 45, 90);
-    toRadio.servoRight = 90;
-    toRadio.servoLeft = x_radio;
-  }
-  //bank and yank - down + right
-  else if(y > 512 && x > 512){
-    y_radio = map(y, 512, 1023, 45, 90);
-    x_radio = map(x, 512, 1023, 45, 0);
-    toRadio.servoRight = x_radio+y_radio;
-    toRadio.servoLeft = y_radio;
-  }
-  //bank and yank - down + left
-  else if (y > 512 && x < 512){
-    y_radio = map(y, 512, 1023, 45, 90);
-    x_radio = map(x, 0, 512, 90, 0);
-    toRadio.servoRight = y_radio;
-    toRadio.servoLeft = y_radio+x_radio;
- }
-  
-  else{
-    toRadio.servoRight = 90;
-    toRadio.servoLeft = 90;
-  }*/  
   
   //write to the radio pipeline the struct Send
   radio.write(&toRadio, sizeof(toRadio));
-  
+
+  //Testing servo values
+  /*Serial.print("Right Servo: ");
+  Serial.print(toRadio.servoRight);
+  Serial.print(" Left Servo: ");
+  Serial.println(toRadio.servoLeft);*/
   
 }
 
