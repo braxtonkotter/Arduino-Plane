@@ -86,6 +86,7 @@ void loop() {
     toRadio.servoRight = y - x;
     //left servo = y + x
     toRadio.servoLeft = y + x;
+    //hello
     toRadio.servoLeft = map(toRadio.servoLeft, 0, 180, 180, 0); 
   }
   //if 518
