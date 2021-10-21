@@ -86,7 +86,7 @@ void loop() {
     toRadio.servoRight = y - x;
     //left servo = y + x
     toRadio.servoLeft = y + x;
-    //hello
+    
     toRadio.servoLeft = map(toRadio.servoLeft, 0, 180, 180, 0); 
   }
   //if 518
@@ -104,21 +104,5 @@ void loop() {
   Serial.print(" Left Servo: ");
   Serial.println(toRadio.servoLeft);*/
   
-}
-
-int getPitchR(int fire){
-  if(fire < 518){
-    return 0;
-  }
-  fire = map(fire, 518, 1023, 0, 45);
-  return fire;
-}
-
-int getPitchL(int fire){
-  if(fire > 518){
-    return 0;
-  }
-  fire = map(fire, 0, 518, 45, 0); 
-  return fire;
 }
 

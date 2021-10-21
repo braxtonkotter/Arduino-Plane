@@ -48,13 +48,16 @@ void loop() {
     motor.writeMicroseconds(fromRadio.motorValue);
     rightAlerion.write(fromRadio.servoRight);
     leftAlerion.write(fromRadio.servoLeft);
+
+    
+    
+  } 
+    /*        
     Serial.print("Motor: ");
     Serial.print(fromRadio.motorValue);
     Serial.print(" Right Servo: ");
     Serial.print(fromRadio.servoRight);
     Serial.print(" Left Servo: ");
     Serial.println(fromRadio.servoLeft);
-    
-    
-  }         
+    */
 }
