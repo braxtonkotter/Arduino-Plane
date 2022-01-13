@@ -42,8 +42,7 @@ struct Send toRadio;
 int x, x_radio;
 int y, y_radio;
 
-int getPitchR(int);
-int getPitchL(int);
+bool motionControls;
 
 //function to run on start
 void setup() {
@@ -57,18 +56,34 @@ void setup() {
   radio.stopListening();
   //start the serial if attached to a computer
   Serial.begin(115200);
+  motionControls = false;
 }
 
 //runs every time the microcontroller cycles
 void loop() {  
   //get the value of the joystick
-  toRadio.motorValue = map(analogRead(MOTOR_POT), 509, 1023, 1000, 2000);
+  toRadio.motorValue = map(analogRead(MOTOR_POT), 508, 1023, 998, 2000);
   x = analogRead(X_PIN_JOYSTICK);
   //elevator control
   y = analogRead(Y_PIN_JOYSTICK);
+  Serial.println(toRadio.motorValue);
+
+  if(analogRead(MOTOR_POT) == 0){
+    motionControls = !motionControls;
+    
+  }
+
+  if(motionControls){
+    x_radio = analogRead(A5);
+    y_radio = analogRead(A4);
+
+    x_radio = map(x_radio, 270, 405, 0, 45);
+    y_radio = map(y_radio, 270, 405, 45, 135);      
+  }
+
   
   //if right
-  if(x > 518){
+  if(x > 520){
     y = map(y, 0, 1023, 45, 135);
     x = map(x, 518, 1023, 0, 45);
     
@@ -79,7 +94,7 @@ void loop() {
     toRadio.servoLeft = map(toRadio.servoLeft, 0, 180, 180, 0);  
   }
   //if left
-  else if(x < 518){
+  else if(x < 516){
     y = map(y, 0, 1023, 45, 135);
     x = map(x, 0, 518, 45, 0);
     //right servo = y - x
@@ -90,19 +105,19 @@ void loop() {
     toRadio.servoLeft = map(toRadio.servoLeft, 0, 180, 180, 0); 
   }
   //if 518
-  else {
+  else if (x > 516 || x < 520) {
     toRadio.servoRight = map(y, 0, 1023, 45, 135);
-    toRadio.servoLeft = map(y, 0, 1023, 135, 45);
+    toRadio.servoLeft = map(y, 0, 1023, 135, 45) - 35z;
   }
   
   //write to the radio pipeline the struct Send
   radio.write(&toRadio, sizeof(toRadio));
 
   //Testing servo values
-  /*Serial.print("Right Servo: ");
+  Serial.print("Right Servo: ");
   Serial.print(toRadio.servoRight);
   Serial.print(" Left Servo: ");
-  Serial.println(toRadio.servoLeft);*/
+  Serial.println(toRadio.servoLeft);
   
 }
 

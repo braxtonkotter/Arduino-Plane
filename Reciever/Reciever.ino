@@ -52,12 +52,12 @@ void loop() {
     
     
   } 
-    /*        
+          
     Serial.print("Motor: ");
     Serial.print(fromRadio.motorValue);
     Serial.print(" Right Servo: ");
     Serial.print(fromRadio.servoRight);
     Serial.print(" Left Servo: ");
     Serial.println(fromRadio.servoLeft);
-    */
+   
 }
