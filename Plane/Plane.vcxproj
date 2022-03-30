@@ -139,7 +139,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="dimension.h" />
     <ClInclude Include="graph.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="utils.h" />
