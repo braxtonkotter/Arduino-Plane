@@ -13,22 +13,26 @@
 #include <string.h>
 #include <Servo.h>
 
-//Define Servos
-Servo rightWing; //Port 10
-Servo leftWing; //Port 11
-Servo Motor; //Port 9
+#define RIGHT_SERVO_PORT 4
+#define LEFT_SERVO_PORT 3
+#define MOTOR_PORT 2
+
+//Define Servos & ports
+Servo rightWing; //Port 4
+Servo leftWing; //Port 3
+Servo Motor; //Port 2
 
 //Radio Stuff
-const byte address[6] = "12345";
+const byte address[6] = "22565";
 RF24 radio(7, 8); // CE, CSN
 int currentTime;
 int lastRecieveTime;
 
 //values sent from controller
 struct Plane_Values{
-  byte motorSpeed;
-  byte rightServoRotation;
-  byte leftServoRotation;
+  int motorSpeed;
+  int rightServoRotation;
+  int leftServoRotation;
 };
 struct Plane_Values fromRadio;
 
@@ -43,11 +47,11 @@ void setup() {
   radio.setPALevel(RF24_PA_MIN);
   radio.startListening();
   //Attach Servos
-  Motor.attach(9);
-  rightWing.attach(10);
-  leftWing.attach(11);
+  Motor.attach(MOTOR_PORT);
+  rightWing.attach(RIGHT_SERVO_PORT);
+  leftWing.attach(LEFT_SERVO_PORT);
+  lastRecieveTime = millis();
 }
-
 void loop() {
    //Set Current Time
    currentTime = millis();
@@ -59,15 +63,13 @@ void loop() {
    if(radio.available()){
     radio.read(&fromRadio, sizeof(fromRadio));
     lastRecieveTime = millis();
+    Serial.println(fromRadio.motorSpeed);
     //Serial.println(String(defaultServoAngle + fromRadio.leftServoRotation) + ", " + String(defaultServoAngle + fromRadio.rightServoRotation));
    }
    //Motor & servo movements   
    Motor.writeMicroseconds(fromRadio.motorSpeed);
-   Serial.println(fromRadio.motorSpeed);
    rightWing.write(defaultServoAngle + fromRadio.rightServoRotation);
    leftWing.write(defaultServoAngle + fromRadio.leftServoRotation);
-
-   
 }
 
 //Set all values to 0 if disconnected
