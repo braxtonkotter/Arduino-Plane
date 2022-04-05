@@ -2,6 +2,7 @@
 #include <memory>
 #include <vector>
 #include "utils.h"
+#include <ostream>
 
 /*
 
@@ -23,6 +24,7 @@ We'll need to retrieve values as well, maybe more than one point at a time.
 using std::shared_ptr;
 using std::make_shared;
 using std::vector;
+using std::ostream;
 
 template<class type>
 struct Node {
@@ -33,10 +35,12 @@ struct Node {
 template<class type>
 class graph {
 public:
-	graph(float a = 1) : dx(a) { remainder = 0.0; }
+	graph();
+	graph(float a) : dx(a) { remainder = 0.0; }
 	graph(float a, vector<type> lst) : dx(a) { remainder = 0.0; add(lst); }
 
-	void add(vector<type>); //Adds values from a vector list to the end of a graph
+	void push_back(vector<type>); //Adds values from a vector list to the end of a graph
+	void push_back(type); //Add an element
 	void clear(); //Clears the list of all values. Sets front and back to null, deleting all smart pointers.
 
 	type peek() const { return front->data; }
@@ -52,6 +56,7 @@ public:
 
 	void rePopulateGraph(vector<type> l) { clear(); add(l); } //Re populate the grpah
 	void populateGraph(vector<type> l) { add(l); } //Add to the graph
+	friend ostream& operator<< (ostream& out, const graph& g);
 private:
 	int size; //How many elements the graph holds
 	float dx; //How much the x axis increases per value
@@ -59,28 +64,32 @@ private:
 
 	//Size is inherent, depending on the x upper bound and the x lower bound as well as subdivision size
 
-	void add(type); //Add an element
-
 	shared_ptr<Node<type>> front = nullptr;														//We're using a queue form for values
-	shared_ptr<Node<type>> end = nullptr;
+	shared_ptr<Node<type>> back = nullptr;
 };
 
+template<class type>
+graph<type>::graph() {
+	dx = 1.0;
+	remainder = 0.0;
+}
 //Basic population/depopulation of the graph.
 template<class type>
-void graph<type>::add(type item) { //Add an item to end of the linked list
-	auto temp = make_shared<Node<type>>(item);
+void graph<type>::push_back(type item) { //Add an item to end of the linked list
+	auto temp = make_shared<Node<type>>();
+	temp->data = item;
 	if (front != nullptr) {
-		end->next = temp;
-		end = temp;
+		back->next = temp;
+		back = temp;
 	}
 	else {
 		front = temp;
-		end = temp;
+		back = temp;
 	}
 	size++;
 }
 template<class type>
-void graph<type>::add(vector<type> list) {
+void graph<type>::push_back(vector<type> list) {
 	for (type a : list) {
 		add(a);
 	}
@@ -115,4 +124,10 @@ void graph<type>::pop(int idx) {
 template<class type>
 void graph<type>::setdx(float newdx) {
 
+}
+
+template<class type>
+ostream& operator<<(ostream& out, const graph<type>& g) {
+	idx = 0;
+	while()
 }

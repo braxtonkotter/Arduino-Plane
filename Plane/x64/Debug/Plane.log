@@ -1,6 +1,5 @@
 ﻿  ObjectTesting.cpp
-C:\Users\ryste\source\CS2420\Plane\Plane\waypoint.h(89,52): warning C4244: 'return': conversion from 'const double' to 'float', possible loss of data
-C:\Users\ryste\source\CS2420\Plane\Plane\waypoint.h(90,55): warning C4244: 'return': conversion from 'const double' to 'float', possible loss of data
-C:\Users\ryste\source\CS2420\Plane\Plane\waypoint.h(91,54): warning C4244: 'return': conversion from 'const double' to 'float', possible loss of data
-C:\Users\ryste\source\CS2420\Plane\Plane\ObjectTesting.cpp(49,36): warning C4305: 'argument': truncation from 'double' to 'float'
-  Plane.vcxproj -> C:\Users\ryste\source\CS2420\Plane\x64\Debug\Plane.exe
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\ObjectTesting.cpp(52,36): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\ObjectTesting.cpp(79,27): warning C4305: 'argument': truncation from 'double' to 'float'
+  LINK : C:\Users\ryste\OneDrive\Documents\Plane\x64\Debug\Plane.exe not found or not built by the last incremental link; performing full link
+  Plane.vcxproj -> C:\Users\ryste\OneDrive\Documents\Plane\x64\Debug\Plane.exe
