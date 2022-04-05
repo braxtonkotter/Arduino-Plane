@@ -70,7 +70,6 @@ void loop() {
 
   if(analogRead(MOTOR_POT) == 0){
     motionControls = !motionControls;
-    
   }
 
   if(motionControls){
@@ -107,7 +106,7 @@ void loop() {
   //if 518
   else if (x > 516 || x < 520) {
     toRadio.servoRight = map(y, 0, 1023, 45, 135);
-    toRadio.servoLeft = map(y, 0, 1023, 135, 45) - 35z;
+    toRadio.servoLeft = map(y, 0, 1023, 135, 45) - 35;
   }
   
   //write to the radio pipeline the struct Send
@@ -120,4 +119,3 @@ void loop() {
   Serial.println(toRadio.servoLeft);
   
 }
-
