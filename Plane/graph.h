@@ -39,6 +39,8 @@ public:
 	graph(float a) : dx(a) { remainder = 0.0; }
 	graph(float a, vector<type> lst) : dx(a) { remainder = 0.0; add(lst); }
 
+	graph<type>& operator= (graph<type>& g);
+
 	void push_back(vector<type>); //Adds values from a vector list to the end of a graph
 	void push_back(type); //Add an element
 	void clear(); //Clears the list of all values. Sets front and back to null, deleting all smart pointers.
@@ -64,14 +66,18 @@ private:
 
 	//Size is inherent, depending on the x upper bound and the x lower bound as well as subdivision size
 
-	shared_ptr<Node<type>> front = nullptr;														//We're using a queue form for values
-	shared_ptr<Node<type>> back = nullptr;
+	shared_ptr<subDivision<type>> root = nullptr; // We're using a type of decimal tree
 };
 
 template<class type>
 graph<type>::graph() {
 	dx = 1.0;
 	remainder = 0.0;
+}
+
+template<class type>
+graph<type>& operator= (graph<type>& g) {
+	
 }
 //Basic population/depopulation of the graph.
 template<class type>
@@ -129,5 +135,6 @@ void graph<type>::setdx(float newdx) {
 template<class type>
 ostream& operator<<(ostream& out, const graph<type>& g) {
 	idx = 0;
+	graph<type> temp = g;
 	while()
 }
