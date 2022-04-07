@@ -3,6 +3,7 @@
 #include <chrono>
 #include <algorithm>
 #include "Plane.h"
+#include "utils.h"
 
 using std::runtime_error;
 using std::cout;
@@ -49,6 +50,8 @@ int main() {
 
     bool flight = true;
     bool autoFlight = false;
+
+    plane us;
 
     do
     {

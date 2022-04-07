@@ -1,3 +1,3 @@
 ﻿  PlaneFlying.cpp
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\Plane.h(32,34): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\Plane.h(38,34): warning C4305: 'argument': truncation from 'double' to 'float'
   Plane.vcxproj -> C:\Users\ryste\OneDrive\Documents\Plane\x64\Debug\Plane.exe

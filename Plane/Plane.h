@@ -1,4 +1,7 @@
 #pragma once
+
+#include <chrono>
+
 #include "waypoint.h"
 #include "utils.h"
 #include "graph.h"
@@ -7,11 +10,18 @@ class plane {
 public:
 	plane();
 
+	Vector3 getPosition() { return theplane.position; }
+	Vector3 getOrientation() { return theplane.orientation; }
+
+	void setTarget(Vector3 trg) { target = trg; flightplan(); }
+
 	void fly(); //Send information to the arduino for an action. Built upon flight path.
 private:
 
-	Object home; //Home point. Determine plane stats based on this
-	Object target; //Target point. Fly to here.
+	void flightplan();
+
+	Vector3 home; //Home point. Determine plane stats based on this
+	Vector3 target; //Target point. Fly to here.
 	Object theplane; //The plane.
 	
 	waypoint w1 = waypoint(0, 0, 1); // 0-1

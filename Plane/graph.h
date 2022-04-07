@@ -45,11 +45,14 @@ ostream& operator<<(ostream& out, const graph<type>& g);
 template<class type>
 class graph {
 public:
-	graph();
-	graph(float a);
+	graph(); // Basic constructor
+	graph(float a); // Constructor w/ subdivision length
 
 	void push_back(type obj); //Add a new element to the queue
-	void push_back(vector<type>& list);
+	void push_back(vector<type>& list); //Add more than one element to the queue
+
+	bool insert(vector<type>& list, int idx); //Insert more than one element at the specified index.
+
 	bool pop(); //Remove an element from the queue
 
 	vector<type> getPoints(); // Returns a vector of all points in the graph
@@ -57,12 +60,16 @@ public:
 
 	friend ostream& operator<<<>(ostream& out, const graph<type>& g);
 private:
+
 	int size; //How many elements the graph holds
 	float dx; //How much the x axis increases per value
 	float remainder; //Marks how much further past the last value but not quite to the next value we are.
 	int subDivSize; //How many elements are between subdivision headers.
 
 	bool empty();
+	shared_ptr<Node<type>> getItemAt(int idx); //Get an object at this index.
+
+	shared_ptr<Node<type>> insertAfter(shared_ptr<Node<type>> pt, type add, int idx);
 
 	vector<shared_ptr<Node<type>>> root; // Vector of subdivision "chapter" headers. Bookmarks specific places in the queue.
 
@@ -73,20 +80,19 @@ private:
 template<class type>
 graph<type>::graph() {
 	size = 0;
-	dx = 1.0;
-	remainder = 0.0;
+	dx = 1;
+	remainder = 0;
 	subDivSize = 100;
 }
 template<class type>
 graph<type>::graph(float a) : dx(a) {
 	size = 0;
-	remainder = 0.0;
+	remainder = 0;
 	subDivSize = 100;
 }
 template<class type>
 void graph<type>::push_back(type obj) {
-	auto temp = make_shared<Node<type>>();
-	temp->data = obj;
+	auto temp = make_shared<Node<type>>(obj);
 	if (!empty()) { //Add object
 		temp->previous = back;
 		back->next = temp;
@@ -108,6 +114,58 @@ void graph<type>::push_back(vector<type>& list) {
 	for (type a : list) {
 		push_back(a);
 	}
+}
+template<class type>
+shared_ptr<Node<type>> graph<type>::insertAfter(shared_ptr<Node<type>> pt, type add, int idx) {
+	auto temp = shared_ptr<Node<type>>(add);
+	auto hold = temp->next;
+
+	//All logic for queue editing
+
+	pt->next = temp;
+	temp->previous = pt;
+	temp->next = hold;
+	hold->previous = temp;
+
+	for (int j = floor(idx / subDivSize) - 1; j < floor(size / subDivSize) - 1; j++) { //Move later chapter headings towards the front on spot
+		root[j] = root[j]->previous;
+	}
+
+	size++;
+
+	if (size % subDivSize == 0) { //If we need a new chapter heading
+		root.push_back(back);
+	}
+
+	return temp;
+}
+template<class type>
+bool graph<type>::insert(vector<type>& list, int idx) {
+	auto temp = getItemAt(idx);
+	if (temp != nullptr) {
+		for (int i = 0; i < list.size(); i++) {
+			temp = insertAfter(temp, list[i], idx + i);
+		} //End for, all items inserted.
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+template<class type>
+shared_ptr<Node<type>> graph<type>::getItemAt(int idx) {
+	auto temp = front;
+	if (idx >= size || idx < 0) {
+		return nullptr;
+	}
+	int chapterHeader = floor(idx / subDivSize) - 1;
+	if (chapterHeader >= 0) {
+		temp = root[chapterHeader];
+	}
+	for (int i = 0; i < idx % subDivSize; i++) {
+		temp = temp->next;
+	}
+	return temp;
 }
 template<class type>
 bool graph<type>::pop() {
@@ -147,26 +205,25 @@ vector<type> graph<type>::getPoints() {
 }
 template<class type>
 vector<type> graph<type>::getPoints(int start, int stop) {
-	if (stop <= start || stop >= size || start < 0) {
-		return new vector<type>;
-	}
 	vector<type> list;
-	auto temp = front;
-	int idx = start;
-	int subDivNum = floor(start / subDivSize) - 1;
+	if (!(stop <= start || stop >= size || start < 0)) {
+		auto temp = front;
+		int idx = start;
+		int subDivNum = floor(start / subDivSize) - 1;
 
-	if (subDivNum >= 0) {
-		idx = idx % subDivSize;
-		temp = root[subDivNum];
-	}
-	for (int i = 0; i < idx; i++) {
-		temp = temp->next;
-	}
+		if (subDivNum >= 0) {
+			temp = root[subDivNum];
+		}
+		for (int i = 0; i < idx % subDivSize; i++) {
+			temp = temp->next;
+		}
 
-	for (int i = 0; i < stop - start; i++) {
-		list.push_back(temp->data);
-		temp = temp->next;
+		for (int i = 0; i < stop - start; i++) {
+			list.push_back(temp->data);
+			temp = temp->next;
+		}
 	}
+	return list;
 }
 
 template<class type>
