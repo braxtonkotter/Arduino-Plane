@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <chrono>
-#include <ctime>
+#include <algorithm>
 #include "Plane.h"
 
 using std::runtime_error;
@@ -13,34 +13,62 @@ using namespace std::chrono;
 void returnToController();
 void endProgram();
 
-auto startTime = std::chrono::system_clock::now();
+inline string getCurrentDateTime(string s) { //Logging methods. Attribution: Streamsoup on https://stackoverflow.com/questions/7400418/writing-a-log-file-in-c-c at 12:51 AM 4/7/2022
+    time_t now = time(0);
+    struct tm tstruct;
+	char buf[80];
+    localtime_s(&tstruct, &now);
+    if (s == "now")
+        strftime(buf, sizeof(buf), "%Y-%m-%d %X", &tstruct);
+    else if (s == "date")
+        strftime(buf, sizeof(buf), "%Y-%m-%d", &tstruct);
+    return string(buf);
+};
 
-ofstream generalData(genericString, ios::out);
-ofstream flightData;
+string directory = "Flight Log " + getCurrentDateTime("now") + ".txt";
+
+inline void Logger(string logMsg) {
+    string now = getCurrentDateTime("now");
+
+    ofstream ofs(directory.c_str(), std::ios_base::out | std::ios_base::app);
+    ofs << now << '\t' << logMsg << '\n';
+    ofs.close();
+}
+
+auto start = high_resolution_clock::now();
+auto stop = high_resolution_clock::now();
+auto duration = duration_cast<microseconds>(stop - start);
 
 int main() {
 
-	std::time_t start_time = std::chrono::system_clock::to_time_t(startTime);
-	string genericString;
-	genericString += "Log" += std::ctime(&start_time) += ".txt";
+	std::replace(directory.begin(), directory.end(), ':', '-');
+
+	Logger("Logfile created");
 
 	//Instantiation, and basic stats collection.
 
+    bool flight = true;
+    bool autoFlight = false;
 
-	try
-	{
-		// DepthAI code
-	}
-	catch (const runtime_error& e)
-	{
-		returnToController();
-	}
+    do
+    {
+        if (autoFlight)
+        {
+
+        }
+        else
+        {
+
+        }
+    } while (flight);
+
+    endProgram();
+
 }
 void returnToController() {
-	cout << "AN ERROR OCCURED AND WE RETURNED TO THE REMOTE!" << endl;
+	Logger("Returning to Remote Control...");
 	endProgram();
 }
 void endProgram() {
-	//fout.close();
-	auto sysstop = high_resolution_clock::now();
+	Logger("Ending the program...");
 }

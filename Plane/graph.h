@@ -27,7 +27,6 @@ using std::make_shared;
 using std::vector;
 using std::ostream;
 using std::endl;
-using std::runtime_error;
 using namespace std::chrono;
 
 template<class type>
@@ -47,13 +46,14 @@ template<class type>
 class graph {
 public:
 	graph();
+	graph(float a);
 
-	void add(type i);
-	void remove();
+	void push_back(type obj); //Add a new element to the queue
+	void push_back(vector<type>& list);
+	bool pop(); //Remove an element from the queue
 
 	vector<type> getPoints(); // Returns a vector of all points in the graph
 	vector<type> getPoints(int start, int stop); //Returns a vector of all points between the two specified indices
-	vector<type> getPoints(type start, type stop); //Returns a vector of all points between the two specified objects
 
 	friend ostream& operator<<<>(ostream& out, const graph<type>& g);
 private:
@@ -61,9 +61,6 @@ private:
 	float dx; //How much the x axis increases per value
 	float remainder; //Marks how much further past the last value but not quite to the next value we are.
 	int subDivSize; //How many elements are between subdivision headers.
-
-	void push_back(type obj); //Add a new element to the queue
-	bool pop(); //Remove an element from the queue
 
 	bool empty();
 
@@ -77,6 +74,12 @@ template<class type>
 graph<type>::graph() {
 	size = 0;
 	dx = 1.0;
+	remainder = 0.0;
+	subDivSize = 100;
+}
+template<class type>
+graph<type>::graph(float a) : dx(a) {
+	size = 0;
 	remainder = 0.0;
 	subDivSize = 100;
 }
@@ -98,6 +101,12 @@ void graph<type>::push_back(type obj) {
 
 	if (size % subDivSize == 0) { //Add new chapter header
 		root.push_back(temp);
+	}
+}
+template<class type>
+void graph<type>::push_back(vector<type>& list) {
+	for (type a : list) {
+		push_back(a);
 	}
 }
 template<class type>
@@ -137,16 +146,16 @@ vector<type> graph<type>::getPoints() {
 	return list;
 }
 template<class type>
-vector <type> graph<type>::getPoints(int start, int stop) {
-	if (stop <= start) {
-		throw runtime_error("Invalid range!");
+vector<type> graph<type>::getPoints(int start, int stop) {
+	if (stop <= start || stop >= size || start < 0) {
+		return new vector<type>;
 	}
 	vector<type> list;
 	auto temp = front;
 	int idx = start;
 	int subDivNum = floor(start / subDivSize) - 1;
 
-	if (subDivNum > 0) {
+	if (subDivNum >= 0) {
 		idx = idx % subDivSize;
 		temp = root[subDivNum];
 	}
@@ -155,23 +164,9 @@ vector <type> graph<type>::getPoints(int start, int stop) {
 	}
 
 	for (int i = 0; i < stop - start; i++) {
-
+		list.push_back(temp->data);
+		temp = temp->next;
 	}
-}
-template<class type>
-vector <type> graph<type>::getPoints(type start, type stop) {
-
-}
-
-//Shortcut names
-
-template<class type>
-void graph<type>::add(type i) {
-	push_back(i);
-}
-template<class type>
-void graph<type>::remove() {
-	pop();
 }
 
 template<class type>
