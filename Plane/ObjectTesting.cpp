@@ -1,10 +1,12 @@
 #include "waypoint.h"
 #include "graph.h"
 #include <iostream>
+#include <chrono>
 
 using std::cout;
 using std::endl;
 using std::string;
+using namespace std::chrono;
 
 void waypointTest();
 void graphTest();
@@ -72,13 +74,13 @@ void waypointTest() {
 	}
 }
 void graphTest() {
-	graph<int> intGraphA(1);
-	for (int i = 0; i < 100; i++) {
-		intGraphA.push_back(i);
+	graph<int> intGraphA;
+	auto start = high_resolution_clock::now();
+	for (int i = 0; i < 400; i++) {
+		intGraphA.add(i);
 	}
+	auto stop = high_resolution_clock::now();
+	auto duration = duration_cast<microseconds>(stop - start);
+	cout << "Creation duration: " << duration.count() << endl;
 	cout << intGraphA;
-	graph<int> intGraphB(0.01);
-	for (int i = 0; i < 200; i += 2) {
-		intGraphB.push_back(i);
-	}
 }

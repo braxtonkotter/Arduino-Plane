@@ -146,6 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ObjectTesting.cpp" />
+    <ClCompile Include="PlaneFlying.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

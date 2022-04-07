@@ -3,6 +3,7 @@
 #include <vector>
 #include "utils.h"
 #include <ostream>
+#include <chrono>
 
 /*
 
@@ -25,116 +26,176 @@ using std::shared_ptr;
 using std::make_shared;
 using std::vector;
 using std::ostream;
+using std::endl;
+using std::runtime_error;
+using namespace std::chrono;
 
 template<class type>
 struct Node {
 	type data;
 	shared_ptr<Node<type>> next = nullptr;
+	shared_ptr<Node<type>> previous = nullptr; //Needed for chapter modifying, mainly
 };
+
+template<class type>
+class graph;
+
+template<class type>
+ostream& operator<<(ostream& out, const graph<type>& g);
 
 template<class type>
 class graph {
 public:
 	graph();
-	graph(float a) : dx(a) { remainder = 0.0; }
-	graph(float a, vector<type> lst) : dx(a) { remainder = 0.0; add(lst); }
 
-	graph<type>& operator= (graph<type>& g);
+	void add(type i);
+	void remove();
 
-	void push_back(vector<type>); //Adds values from a vector list to the end of a graph
-	void push_back(type); //Add an element
-	void clear(); //Clears the list of all values. Sets front and back to null, deleting all smart pointers.
+	vector<type> getPoints(); // Returns a vector of all points in the graph
+	vector<type> getPoints(int start, int stop); //Returns a vector of all points between the two specified indices
+	vector<type> getPoints(type start, type stop); //Returns a vector of all points between the two specified objects
 
-	type peek() const { return front->data; }
-	//type peek(float i); //Returns the specified point. For future planning.? PUT ON HOLD UNTIL LATER
-
-	void pop(); //Pops the top value
-	void pop(float step); //Pops however many values the step covers.
-	void pop(int idx); //Pops this many values
-
-	void setdx(float i); //Changes the xStep size. Needed if accuracy needs to be changed. Rescales each value in the graph to fit what it was before, filling in if needed. Really, it  creates a new graph.
-	
-	float getdx() const	{ return dx; }
-
-	void rePopulateGraph(vector<type> l) { clear(); add(l); } //Re populate the grpah
-	void populateGraph(vector<type> l) { add(l); } //Add to the graph
-	friend ostream& operator<< (ostream& out, const graph& g);
+	friend ostream& operator<<<>(ostream& out, const graph<type>& g);
 private:
 	int size; //How many elements the graph holds
 	float dx; //How much the x axis increases per value
 	float remainder; //Marks how much further past the last value but not quite to the next value we are.
+	int subDivSize; //How many elements are between subdivision headers.
 
-	//Size is inherent, depending on the x upper bound and the x lower bound as well as subdivision size
+	void push_back(type obj); //Add a new element to the queue
+	bool pop(); //Remove an element from the queue
 
-	shared_ptr<subDivision<type>> root = nullptr; // We're using a type of decimal tree
+	bool empty();
+
+	vector<shared_ptr<Node<type>>> root; // Vector of subdivision "chapter" headers. Bookmarks specific places in the queue.
+
+	shared_ptr<Node<type>> front = nullptr;
+	shared_ptr<Node<type>> back = nullptr;
 };
 
 template<class type>
 graph<type>::graph() {
+	size = 0;
 	dx = 1.0;
 	remainder = 0.0;
+	subDivSize = 100;
 }
-
 template<class type>
-graph<type>& operator= (graph<type>& g) {
-	
-}
-//Basic population/depopulation of the graph.
-template<class type>
-void graph<type>::push_back(type item) { //Add an item to end of the linked list
+void graph<type>::push_back(type obj) {
 	auto temp = make_shared<Node<type>>();
-	temp->data = item;
-	if (front != nullptr) {
+	temp->data = obj;
+	if (!empty()) { //Add object
+		temp->previous = back;
 		back->next = temp;
 		back = temp;
 	}
-	else {
+	else { //Add object
 		front = temp;
 		back = temp;
 	}
+
 	size++;
-}
-template<class type>
-void graph<type>::push_back(vector<type> list) {
-	for (type a : list) {
-		add(a);
-	}
-}
 
-template<class type>
-void graph<type>::clear()
-{
-	front = nullptr;
-	back = nullptr;
-	size = 0;
-}
-
-template<class type>
-void graph<type>::pop() {
-	front = front->next;
-	size--;
-}
-template<class type>
-void graph<type>::pop(float step) {
-	for (float i = 0; i < step; i += dx) {
-		pop();
+	if (size % subDivSize == 0) { //Add new chapter header
+		root.push_back(temp);
 	}
 }
 template<class type>
-void graph<type>::pop(int idx) {
+bool graph<type>::pop() {
+	if (!empty()) { //If there is a value to remove
+		if (size % subDivSize == 0) { //If we're about to make it smaller than the subdivision
+			root.pop_back();
+		}
+
+		front = front->next; //Move forward.
+		front->previous = nullptr; //Delete the first value
+
+		for (shared_ptr<Node<type>> obj : root) { //For each chapter heading, move it one object further.
+			obj = obj->next;
+		}
+
+		size--;
+
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+template<class type>
+bool graph<type>::empty() {
+	return front == nullptr;
+}
+template<class type>
+vector<type> graph<type>::getPoints() {
+	vector<type> list;
+	auto temp = front;
+	while (front != nullptr) {
+		list.push_back(temp->data);
+		temp = temp->next;
+	}
+	return list;
+}
+template<class type>
+vector <type> graph<type>::getPoints(int start, int stop) {
+	if (stop <= start) {
+		throw runtime_error("Invalid range!");
+	}
+	vector<type> list;
+	auto temp = front;
+	int idx = start;
+	int subDivNum = floor(start / subDivSize) - 1;
+
+	if (subDivNum > 0) {
+		idx = idx % subDivSize;
+		temp = root[subDivNum];
+	}
 	for (int i = 0; i < idx; i++) {
-		pop();
+		temp = temp->next;
+	}
+
+	for (int i = 0; i < stop - start; i++) {
+
 	}
 }
+template<class type>
+vector <type> graph<type>::getPoints(type start, type stop) {
+
+}
+
+//Shortcut names
 
 template<class type>
-void graph<type>::setdx(float newdx) {
-
+void graph<type>::add(type i) {
+	push_back(i);
+}
+template<class type>
+void graph<type>::remove() {
+	pop();
 }
 
 template<class type>
 ostream& operator<<(ostream& out, const graph<type>& g) {
-	idx = 0;
-	graph<type> temp = g;
-	while()
+	auto temp = g.front;
+	auto start = high_resolution_clock::now();
+	while (temp != nullptr) {
+		out << temp->data << " ";
+		temp = temp->next;
+	}
+	auto stop = high_resolution_clock::now();
+	auto duration = duration_cast<microseconds>(stop - start);
+
+	out << endl << "Executed in " << duration.count() << " microseconds" << endl;
+
+	out << "Chapter headings: ";
+	start = high_resolution_clock::now();
+	for (int i = 0; i < floor(g.size / g.subDivSize); i++) {
+		out << g.root[i]->data << " ";
+	}
+	stop = high_resolution_clock::now();
+	duration = duration_cast<microseconds>(stop - start);
+
+	out << endl << "Executed in " << duration.count() << " microseconds" << endl;
+
+	return out;
 }

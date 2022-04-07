@@ -1,5 +1,16 @@
 ﻿  ObjectTesting.cpp
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\graph.h(132,8): error C2760: syntax error: ')' was unexpected here; expected 'condition'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\graph.h(133,1): error C2760: syntax error: '}' was unexpected here; expected 'statement'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\ObjectTesting.cpp(52,36): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\ObjectTesting.cpp(80,27): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\ObjectTesting.cpp(54,36): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\graph.h(56,1): error C2535: 'std::vector<type,std::allocator<type>> graph<type>::getPoints(int,int)': member function already defined or declared
+          with
+          [
+              type=int
+          ]
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\graph.h(55): message : see declaration of 'graph<int>::getPoints'
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\ObjectTesting.cpp(77): message : see reference to class template instantiation 'graph<int>' being compiled
+  PlaneFlying.cpp
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\Plane.h(32,34): error C2440: '<function-style-cast>': cannot convert from 'double' to 'graph<Vector3>'
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\Plane.h(32,34): message : No constructor could take the source type, or constructor overload resolution was ambiguous
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\PlaneFlying.cpp(18,22): error C2065: 'genericString': undeclared identifier
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\PlaneFlying.cpp(25,61): error C2297: '+=': illegal, right operand has type 'const char [5]'
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\PlaneFlying.cpp(25,61): error C2114: '+=': pointer on left; needs integral value on right
+  Generating Code...
