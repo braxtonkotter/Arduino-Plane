@@ -4,6 +4,7 @@
 #include <algorithm>
 #include "Plane.h"
 #include "utils.h"
+#include "maths.h"
 
 using std::runtime_error;
 using std::cout;

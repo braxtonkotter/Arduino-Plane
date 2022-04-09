@@ -1,22 +1,6 @@
 ﻿  PlaneFlying.cpp
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\maths.h(25,13): error C2079: 'function::val' uses undefined class 'expression'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\maths.h(29,18): error C2027: use of undefined type 'expression'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\maths.h(7): message : see declaration of 'expression'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\maths.h(85,19): error C2027: use of undefined type 'variable'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\maths.h(8): message : see declaration of 'variable'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\maths.h(89,19): error C2027: use of undefined type 'variable'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\maths.h(8): message : see declaration of 'variable'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\maths.h(110,18): error C2027: use of undefined type 'variable'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\maths.h(8): message : see declaration of 'variable'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\maths.h(112,5): error C2027: use of undefined type 'variable'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\maths.h(8): message : see declaration of 'variable'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\maths.h(112,16): error C2039: 'getOperand': is not a member of 'std::shared_ptr<variable>'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\maths.h(60): message : see declaration of 'std::shared_ptr<variable>'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\maths.h(113,11): error C2027: use of undefined type 'variable'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\maths.h(8): message : see declaration of 'variable'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\maths.h(113,13): error C2039: 'setOperand': is not a member of 'std::shared_ptr<variable>'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\maths.h(60): message : see declaration of 'std::shared_ptr<variable>'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\maths.h(115,10): error C2027: use of undefined type 'variable'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\maths.h(8): message : see declaration of 'variable'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\maths.h(115,12): error C2039: 'setNextVar': is not a member of 'std::shared_ptr<variable>'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\maths.h(60): message : see declaration of 'std::shared_ptr<variable>'
+PlaneFlying.obj : error LNK2019: unresolved external symbol "public: __cdecl expression::expression(void)" (??0expression@@QEAA@XZ) referenced in function "public: __cdecl function::function(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (??0function@@QEAA@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)
+PlaneFlying.obj : error LNK2019: unresolved external symbol "public: void __cdecl expression::setNextExp(class std::shared_ptr<class expression>)" (?setNextExp@expression@@QEAAXV?$shared_ptr@Vexpression@@@std@@@Z) referenced in function "private: void __cdecl expression::addExp(class expression)" (?addExp@expression@@AEAAXV1@@Z)
+PlaneFlying.obj : error LNK2019: unresolved external symbol "private: void __cdecl expression::setFinalOperand(char)" (?setFinalOperand@expression@@AEAAXD@Z) referenced in function "public: __cdecl expression::expression(char *)" (??0expression@@QEAA@PEAD@Z)
+PlaneFlying.obj : error LNK2019: unresolved external symbol "private: char __cdecl expression::getFinalOperand(void)const " (?getFinalOperand@expression@@AEBADXZ) referenced in function "public: __cdecl expression::expression(char *)" (??0expression@@QEAA@PEAD@Z)
+C:\Users\ryste\OneDrive\Documents\Plane\x64\Debug\Plane.exe : fatal error LNK1120: 4 unresolved externals

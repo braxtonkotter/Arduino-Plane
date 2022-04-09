@@ -12,22 +12,72 @@ using std::shared_ptr;
 using std::string;
 using std::make_shared;
 
-//===== function.h
+//===== variable.h
 
-class function {
+class variable {
 public:
-	function(string s);
+	variable() { val = 0; var = false; operand = ' '; }
+	variable(bool x, double v, char c = ' ') : val(v), var(x) {}
+	variable(bool x, char c = ' ') : var(x), operand(c) { val = 0; }
 
-	void operator+(function f); // Add function to another
+	/*variable operator+(expression e);
+	variable operator-(expression e);
+	variable operator*(expression e);
+	variable operator/(expression e);
+	variable operator^(expression e);
 
-	double operator()(double d); // Determine the value based on a parameter
+	variable operator+(variable v);
+	variable operator-(variable v);
+	variable operator*(variable v);
+	variable operator/(variable v);
+	variable operator^(variable v);
+
+	shared_ptr<variable> operator()(double d) const;*/
+
+	void setOperand(const char ch) { operand = ch; }
+	char getOperand() const { return operand; }
+
+	void setNextVar(shared_ptr<variable> var);
+	void setNextExp(shared_ptr<expression> exp);
+
+	bool isVar() const { return var; }
+	double value() const { return val; }
 private:
-	expression val;
+	double val;
+	bool var;
+
+	char operand;
+
+	shared_ptr<expression> nextExp = nullptr;
+	shared_ptr<variable> nextVar = nullptr;
 };
 
-function::function(string s) {
-	val = expression(&s[0]);
+void variable::setNextVar(shared_ptr<variable> var) {
+	nextVar = var;
 }
+
+void variable::setNextExp(shared_ptr<expression> var) {
+	nextExp = var;
+}
+
+/*shared_ptr<variable> variable::operator()(double d) const
+{
+	auto temp = make_shared<variable>(false, val); //this copied
+	if (isVar()) {
+		temp->val = d;
+	}
+
+	temp->setOperand(operand);
+
+	if (nextExp != nullptr) {
+		temp->nextExp = nextExp->operator()(d);
+	}
+	else if (nextVar != nullptr) {
+		temp->nextVar = nextVar->operator()(d);
+	}
+
+	return temp;
+}*/
 
 //===== expression.h
 
@@ -129,72 +179,22 @@ void expression::addExp(expression exp) {
 	finalVar = nullptr;
 }
 
-//===== variable.h
+//===== function.h
 
-class variable {
+class function {
 public:
-	variable() { val = 0; var = false; operand = ' '; }
-	variable(bool x, double v, char c = ' ') : val(v), var(x) {}
-	variable(bool x, char c = ' ') : var(x), operand(c) { val = 0; }
+	function(string s);
 
-	/*variable operator+(expression e);
-	variable operator-(expression e);
-	variable operator*(expression e);
-	variable operator/(expression e);
-	variable operator^(expression e);
+	void operator+(function f); // Add function to another
 
-	variable operator+(variable v);
-	variable operator-(variable v);
-	variable operator*(variable v);
-	variable operator/(variable v);
-	variable operator^(variable v);
-
-	shared_ptr<variable> operator()(double d) const;*/
-
-	void setOperand(const char ch) { operand = ch; }
-	char getOperand() const { return operand; }
-
-	void setNextVar(shared_ptr<variable> var);
-	void setNextExp(shared_ptr<expression> exp);
-
-	bool isVar() const { return var; }
-	double value() const { return val; }
+	double operator()(double d); // Determine the value based on a parameter
 private:
-	double val;
-	bool var;
-
-	char operand;
-
-	shared_ptr<expression> nextExp = nullptr;
-	shared_ptr<variable> nextVar = nullptr;
+	expression val;
 };
 
-void variable::setNextVar(shared_ptr<variable> var) {
-	nextVar = var;
+function::function(string s) {
+	val = expression(&s[0]);
 }
-
-void variable::setNextExp(shared_ptr<expression> var) {
-	nextExp = var;
-}
-
-/*shared_ptr<variable> variable::operator()(double d) const
-{
-	auto temp = make_shared<variable>(false, val); //this copied
-	if (isVar()) {
-		temp->val = d;
-	}
-
-	temp->setOperand(operand);
-
-	if (nextExp != nullptr) {
-		temp->nextExp = nextExp->operator()(d);
-	}
-	else if (nextVar != nullptr) {
-		temp->nextVar = nextVar->operator()(d);
-	}
-
-	return temp;
-}*/
 
 //====== SpaceCurve.h
 
