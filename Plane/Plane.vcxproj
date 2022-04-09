@@ -139,10 +139,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="equation.h" />
+    <ClInclude Include="expression.h" />
     <ClInclude Include="fraction.h" />
+    <ClInclude Include="function.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="utils.h" />
+    <ClInclude Include="variable.h" />
     <ClInclude Include="waypoint.h" />
   </ItemGroup>
   <ItemGroup>
