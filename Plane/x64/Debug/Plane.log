@@ -1,7 +1,15 @@
 ﻿  PlaneFlying.cpp
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\variable.h(33,29): error C2065: 'expression': undeclared identifier
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\variable.h(33,18): error C2923: 'std::shared_ptr': 'expression' is not a valid template type argument for parameter '_Ty'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\variable.h(33): message : see declaration of 'expression'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\variable.h(43,13): error C2065: 'expression': undeclared identifier
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\variable.h(43,2): error C2923: 'std::shared_ptr': 'expression' is not a valid template type argument for parameter '_Ty'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\variable.h(43): message : see declaration of 'expression'
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\variable.h(34,29): error C2065: 'expression': undeclared identifier
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\variable.h(34,18): error C2923: 'std::shared_ptr': 'expression' is not a valid template type argument for parameter '_Ty'
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\variable.h(34): message : see declaration of 'expression'
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\variable.h(44,13): error C2065: 'expression': undeclared identifier
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\variable.h(44,2): error C2923: 'std::shared_ptr': 'expression' is not a valid template type argument for parameter '_Ty'
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\variable.h(44): message : see declaration of 'expression'
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\variable.h(52,38): error C2065: 'expression': undeclared identifier
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\variable.h(52,27): error C2923: 'std::shared_ptr': 'expression' is not a valid template type argument for parameter '_Ty'
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\variable.h(52): message : see declaration of 'expression'
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\variable.h(53,15): error C2678: binary '=': no operator found which takes a left-hand operand of type 'std::shared_ptr' (or there is no acceptable conversion)
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\include\memory(1628,17): message : could be 'std::shared_ptr<_Ty> &std::shared_ptr<_Ty>::operator =(std::shared_ptr<_Ty> &&) noexcept'
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\include\memory(1617,17): message : or       'std::shared_ptr<_Ty> &std::shared_ptr<_Ty>::operator =(const std::shared_ptr<_Ty> &) noexcept'
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\variable.h(53,15): message : while trying to match the argument list '(std::shared_ptr, std::shared_ptr)'
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\variable.h(53,15): error C2582: 'operator =' function is unavailable in 'std::shared_ptr'
