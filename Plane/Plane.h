@@ -3,6 +3,7 @@
 #include <chrono>
 
 #include "waypoint.h"
+#include "maths.h"
 #include "utils.h"
 
 class plane {

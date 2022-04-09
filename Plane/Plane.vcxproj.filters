@@ -24,19 +24,10 @@
     <ClInclude Include="waypoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="expression.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="fraction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="variable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="function.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SpaceCurve.h">
+    <ClInclude Include="maths.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

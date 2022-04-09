@@ -1,5 +1,4 @@
 #pragma once
-#include "function.h"
 
 struct coordinate {
 	coordinate(float a = 0, float b = 0) {
