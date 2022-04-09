@@ -20,7 +20,7 @@ private:
 
 	void flightplan();
 	bool plausibility();
-	int safety
+	int safety();
 
 	Vector3 home; //Home point. Determine plane stats based on this
 	Vector3 target; //Target point. Fly to here.
