@@ -5,24 +5,20 @@
 
 using std::ostream;
 using std::string;
+using std::shared_ptr;
 
 class waypoint {
 public:
-	waypoint(float a = 0.0, float b = 0.0, float c = 0.0, waypoint *d = nullptr, waypoint *e = nullptr) {
+	waypoint(float a = 0.0, float b = 0.0, float c = 0.0) {
 		position.offset = a;
 		position.elevation = b;
 		position.distance = c;
 		reFormatPosition();
-
-		previousWaypoint = d;
-		nextWaypoint = e;
 	}
 
-	void updateWaypoint(float a, float b);
-	void updateWaypoint(float a, float b, float c);
+	void updateWaypoint(float a=0, float b=0, float c=0);
 
-	void addToWaypoint(float a, float b);
-	void addToWaypoint(float a, float b, float c);
+	void addToWaypoint(float a=0, float b=0, float c=0);
 
 	float getOffset() const;
 	float getElevation() const;
@@ -32,26 +28,12 @@ public:
 private:
 	polarCoordinate position; // Where the waypoint points to and how far it is away
 	void reFormatPosition();
-	waypoint* previousWaypoint = nullptr;
-	waypoint* nextWaypoint = nullptr;
 };
-
-void waypoint::updateWaypoint(float a, float b) {
-	position.offset = a;
-	position.elevation = b;
-	reFormatPosition();
-}
 
 void waypoint::updateWaypoint(float a, float b, float c) {
 	position.offset = a;
 	position.elevation = b;
 	position.distance = c;
-	reFormatPosition();
-}
-
-void waypoint::addToWaypoint(float a, float b) {
-	position.offset += a;
-	position.elevation += b;
 	reFormatPosition();
 }
 

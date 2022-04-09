@@ -1,4 +1,2 @@
 ﻿  PlaneFlying.cpp
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\Plane.h(25,2): error C3646: 'Vector3': unknown override specifier
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\Plane.h(23,10): error C3646: 'home': unknown override specifier
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\Plane.h(44,34): warning C4305: 'argument': truncation from 'double' to 'float'
+  Plane.vcxproj -> C:\Users\ryste\OneDrive\Documents\Plane\x64\Debug\Plane.exe

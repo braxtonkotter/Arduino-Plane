@@ -4,7 +4,6 @@
 
 #include "waypoint.h"
 #include "utils.h"
-#include "graph.h"
 
 class plane {
 public:
@@ -37,9 +36,9 @@ private:
 	waypoint w9 = waypoint(0, 0, 30); //20-30
 	waypoint w10 = waypoint(0, 0, 40); //30-40
 
-	graph<Vector3> flightPath; //Vector3 points of the flight path.
+	//SpaceCurve flightPath; // Space Curve of the flight path
 };
 
 plane::plane() {
-	flightPath = graph<Vector3>(0.01); //Sets flight path increments to 1 centimeter
+	
 }
