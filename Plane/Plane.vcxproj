@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClCompile Include="ObjectTesting.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent>false</DeploymentContent>
     </ClCompile>
     <ClCompile Include="PlaneFlying.cpp" />
   </ItemGroup>

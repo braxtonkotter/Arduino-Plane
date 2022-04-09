@@ -55,12 +55,14 @@ public:
 
 	bool pop(); //Remove an element from the queue
 
+	type peek();
+	type peek(int);
+
 	vector<type> getPoints(); // Returns a vector of all points in the graph
 	vector<type> getPoints(int start, int stop); //Returns a vector of all points between the two specified indices
 
 	friend ostream& operator<<<>(ostream& out, const graph<type>& g);
 private:
-
 	int size; //How many elements the graph holds
 	float dx; //How much the x axis increases per value
 	float remainder; //Marks how much further past the last value but not quite to the next value we are.
