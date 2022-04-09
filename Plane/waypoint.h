@@ -20,6 +20,9 @@ public:
 
 	void addToWaypoint(float a=0, float b=0, float c=0);
 
+	waypoint operator+(waypoint& w) { addToWaypoint(w.getOffset(), w.getElevation(), w.getDistance()); }
+	waypoint operator-(waypoint& w) { addToWaypoint(-1 * w.getOffset(), -1 * w.getElevation(), -1 * w.getDistance()); }
+
 	float getOffset() const;
 	float getElevation() const;
 	float getDistance() const;

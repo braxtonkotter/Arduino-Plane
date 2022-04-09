@@ -145,6 +145,7 @@
     <ClInclude Include="Plane.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="variable.h" />
+    <ClInclude Include="SpaceCurve.h" />
     <ClInclude Include="waypoint.h" />
   </ItemGroup>
   <ItemGroup>
