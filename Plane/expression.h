@@ -10,15 +10,10 @@ using std::string;
 using std::make_shared;
 using std::stoi;
 
-struct operation {
-	char symbol = ' ';
-	shared_ptr<expression> exPtr = nullptr;
-	shared_ptr<variable> varPtr = nullptr;
-};
-
 class expression {
 public:
-	expression(string s);
+	expression();
+	expression(char* ch_arr);
 
 	double operator+(expression e);
 	double operator-(expression e);
@@ -33,79 +28,77 @@ public:
 
 	void simplify(); // Combines like terms
 
-	double operator()(double); // Solve the expression with a variable number
+	char getOperand() const{ return operand; }
+	void setOperand(const char ch) { operand = ch; }
+
+	void setNextVar(shared_ptr<variable> var);
+	void setNextExp(shared_ptr<expression> exp);
+
+	shared_ptr<expression> operator()(double); // Solve the expression with a variable number
 
 private:
-	double concatNum(string& s);
-	string removeFirstChar(string& s);
+
+	void addVar(variable);
+	void addExp(expression);
+
+	void setFinalOperand(const char ch);
+	char getFinalOperand() const;
+
 	shared_ptr<variable> var = nullptr;
-	shared_ptr<expression> nextExp = nullptr;
-	operation operand;
+	shared_ptr<variable> finalVar = nullptr;
+
+	shared_ptr<expression> Exp = nullptr;
+	shared_ptr<expression> finalExp = nullptr;
+
+	char operand;
 };
 
-double expression::concatNum(string& s) {
-	bool dec = false;
-	string preDec;
-	string postDec;
-	while((s[0]>='0' && s[0]<='9') || s[0] == '.') { // Split up the string to make a number string
-		char ch = s[0];
-		if (ch >= '0' && ch <= '9') {
-			s = removeFirstChar(s);
-			if (dec) {
-				postDec += ch;
-			}
-			else {
-				preDec += ch;
-			}
+expression::expression(char* ch_arr) { //Allowed: t, any number, +, -, /, *, ^, (, )
+	while (*ch_arr != '\0') { // While there's still more string to traverse
+		if (*ch_arr == 't') { // If it's a variable
+			addVar(variable(true));
 		}
-		else if (ch == '.') {
-			dec = true;
+		else if (*ch_arr >= '1' && *ch_arr <= '9') { // If it's a number
+			char* end;
+			addVar(variable(false,strtod(ch_arr, &end)));
+			ch_arr = end;
 		}
+		else if (( *ch_arr == '+' || *ch_arr == '-' || *ch_arr == '*' || *ch_arr == '/' || *ch_arr == '^') && getFinalOperand() == ' ') {
+			setFinalOperand(*ch_arr);
+		}
+		else if (*ch_arr == '(') {
+			ch_arr++;
+			addExp(expression(ch_arr));
+		}
+		else if (*ch_arr == ')') {
+			break;
+		}
+
+		ch_arr++;
 	}
-
-	double front = stoi(preDec);
-
-	if (dec) {
-		front += stoi(postDec) / (pow(10,postDec.size()));
-	}
-	
-	return front;
-}
-
-string expression::removeFirstChar(string& s) {
-	string temp;
-	for (int i = 1; i < s.size(); i++) {
-		temp += s[i];
-	}
-	return temp;
-}
-
-expression::expression(string exp) { //Allowed: any char, any number, +, -, /, *, ^
-	string temp = exp;
-	while (temp.size() > 0) {
-		char ch = temp[0];
-		if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
-			if (var != nullptr) {
-				var = make_shared<variable>(ch, true);
-			}
-			else {
-				operand.symbol = '*';
-				temp = removeFirstChar(temp);
-				nextExp = make_shared<expression>(temp);
-			}
-		}
-		else if (ch >= '1' && ch <= '9') {
-			int x = concatNum(temp);
-		}
-		else if (ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '^') {
-			operand.symbol = ch;
-			temp = removeFirstChar(temp);
-			nextExp = make_shared<expression>(temp);
-		}
-
-		temp = removeFirstChar(temp);
+	if (*ch_arr == '\0') {
+		delete ch_arr;
 	}
 }
-double expression::operator+(expression e) {
 
+void expression::addVar(variable var) {
+	auto temp = make_shared<variable>(var);
+	if (finalVar->getOperand() == ' ') {
+		finalVar->setOperand('*');
+	}
+	finalVar->setNextVar(temp);
+	finalVar = temp;
+
+	finalExp = nullptr;
+}
+
+void expression::addExp(expression exp) {
+	auto temp = make_shared<expression>(exp);
+	if (finalExp->getOperand() == ' ') {
+		finalExp->setOperand('*');
+	}
+	finalExp->setNextExp(temp);
+	finalExp = temp;
+
+	finalVar = nullptr;
 }

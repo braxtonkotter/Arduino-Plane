@@ -1,1 +1,7 @@
-﻿  Plane.vcxproj -> C:\Users\ryste\OneDrive\Documents\Plane\x64\Debug\Plane.exe
+﻿  PlaneFlying.cpp
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\variable.h(33,29): error C2065: 'expression': undeclared identifier
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\variable.h(33,18): error C2923: 'std::shared_ptr': 'expression' is not a valid template type argument for parameter '_Ty'
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\variable.h(33): message : see declaration of 'expression'
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\variable.h(43,13): error C2065: 'expression': undeclared identifier
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\variable.h(43,2): error C2923: 'std::shared_ptr': 'expression' is not a valid template type argument for parameter '_Ty'
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\variable.h(43): message : see declaration of 'expression'

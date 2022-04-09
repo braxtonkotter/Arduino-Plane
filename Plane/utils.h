@@ -1,4 +1,5 @@
 #pragma once
+#include "function.h"
 
 struct coordinate {
 	coordinate(float a = 0, float b = 0) {
@@ -29,11 +30,4 @@ struct polarCoordinate {
 	float elevation;
 	float offset;
 	float distance;
-};
-
-struct Object { //Position. orientation, size
-	Object(Vector3 a, Vector3 b, Vector3 c) : position(a), orientation(b), size(c) {}
-	Vector3 position;
-	Vector3 orientation;
-	Vector3 size;
 };

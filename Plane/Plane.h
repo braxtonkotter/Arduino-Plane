@@ -9,8 +9,8 @@ class plane {
 public:
 	plane();
 
-	Vector3 getPosition() { return theplane.position; }
-	Vector3 getOrientation() { return theplane.orientation; }
+	Vector3 getPosition() { return pos; }
+	Vector3 getOrientation() { return orientation; }
 
 	void setTarget(Vector3 trg) { target = trg; flightplan(); }
 
@@ -21,9 +21,11 @@ private:
 	bool plausibility();
 	int safety();
 
-	Vector3 home; //Home point. Determine plane stats based on this
-	Vector3 target; //Target point. Fly to here.
-	Object theplane; //The plane.
+	const Vector3 home = Vector3(0,0,0); //Home point. Determine plane stats based on this
+	Vector3 target = Vector3(0,0,0); //Target point. Fly to here.
+	Vector3 pos = Vector3(0,0,0);
+	Vector3 orientation = Vector3(0, 0, 0);
+	const Vector3 size = Vector3(0,0,0);
 	
 	waypoint w1 = waypoint(0, 0, 1); // 0-1
 	waypoint w2 = waypoint(0, 0, 2); // 1-2
