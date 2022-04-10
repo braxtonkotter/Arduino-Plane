@@ -42,12 +42,13 @@ public:
 
 	void simplify(); // Starts the simplification process for the specific class
 	string simplify(string); // Combines like terms
-	vector<string> simplify(vector<string>);
 
 	bool singleTerm(const string); // Returns true if it's a single term
 
 	double operator()(double); // Solve the expression with a variable number
 private:
+	string formatEquation(string);
+
 	string exp;
 };
 
@@ -156,12 +157,38 @@ string expression::simplify(string s) {
 	
 	//Loop of combination of like terms followed by PEMDAS
 
-	vector<string> factors;
+	//Math now
 
+	char* ptr = &newExpr[0]; //Pointer to 
+
+	for (string s : factors) {
+		newExpr += s;
+	}
+
+	delete ptr;
+
+	return newExpr;
+}
+
+void expression::simplify() {
+	exp = formatEquation(exp);
+	exp = simplify(exp);
+}
+
+bool expression::singleTerm(const string s) {
+	for (char c : operators) {
+		if (exp.find(c) != string::npos) {
+			return false;
+		}
+	}
+	return true;
+}
+
+string expression::formatEquation(string s) {
 	string newExpr;
 
 	string temp;
-	
+
 	for (int i = 0; i < s.length(); i++) { // Prepare the expression for the operations that follow
 		char c = s[i];
 
@@ -184,7 +211,7 @@ string expression::simplify(string s) {
 					temp.pop_back(); //Remove the decimal
 				}
 				temp += "*";
-				factors.push_back(temp);
+				newExpr += temp;
 				temp = "";
 			}
 			temp += c; //Add the variable
@@ -193,49 +220,15 @@ string expression::simplify(string s) {
 			if (c == '(' || c == ')') { //If we're dealing with a parenthesis, it'll be 5(x), 10+2(3+x). Split up into 5* ( x ), 10+ 2 * ( 3+ x )
 				if (!temp.empty()) { //If there's a number before the operator, add a multiplication symbol, then clear.
 					temp += '*';
-					factors.push_back(temp);
+					newExpr += temp;
 					temp = ""; //Clear the current string
 				}
 			}
 			temp += c; // Add the operator. Parentheses will be alone.
-			factors.push_back(temp);
+			newExpr += temp;
 			temp = "";
 		}
 	}
 
-	//Math now
-
-	factors = simplify(factors);
-
-	for (string s : factors) {
-		newExpr += s;
-	}
-
 	return newExpr;
-}
-
-vector<string> expression::simplify(vector<string> expr) {
-
-	//Combine like terms. Follow PEMDAS
-
-	vector<string>::iterator ptr;
-
-	for (ptr = expr.begin(); ptr < expr.end(); ptr++;) {
-		if ((*ptr)[0] == '(') {
-
-		}
-	}
-}
-
-void expression::simplify() {
-	exp = simplify(exp);
-}
-
-bool expression::singleTerm(const string s) {
-	for (char c : operators) {
-		if (exp.find(c) != string::npos) {
-			return false;
-		}
-	}
-	return true;
 }
