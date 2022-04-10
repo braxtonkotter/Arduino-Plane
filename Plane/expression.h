@@ -1,19 +1,13 @@
 #pragma once
-#include "utils.h"
 #include "variable.h"
-#include <math.h>
-#include <memory>
-#include <string>
-
-using std::shared_ptr;
-using std::string;
-using std::make_shared;
-using std::stoi;
 
 class expression {
 public:
 	expression();
 	expression(char* ch_arr);
+	expression(expression& e);
+
+	expression operator=(expression& e);
 
 	double operator+(expression e);
 	double operator-(expression e);
@@ -28,11 +22,17 @@ public:
 
 	void simplify(); // Combines like terms
 
-	char getOperand() const{ return operand; }
-	void setOperand(const char ch) { operand = ch; }
+	char getOperator() const { return operand; }
+	void setOperator(const char ch) { operand = ch; }
 
 	void setNextVar(shared_ptr<variable> var);
 	void setNextExp(shared_ptr<expression> exp);
+
+	shared_ptr<variable> getNextVar() const { return nextVar; }
+	shared_ptr<expression> getNextExp() const { return nextExp; }
+
+	void assign(string);
+	void assign(char* ch_arr);
 
 	shared_ptr<expression> operator()(double); // Solve the expression with a variable number
 
@@ -41,17 +41,21 @@ private:
 	void addVar(variable);
 	void addExp(expression);
 
-	void setFinalOperand(const char ch);
-	char getFinalOperand() const;
+	void setFinalSubOperator(const char ch);
+	char getFinalSubOperator() const;
 
-	shared_ptr<variable> var = nullptr;
-	shared_ptr<variable> finalVar = nullptr;
+	shared_ptr<variable> nextVar = nullptr;
+	shared_ptr<variable> firstSubVar = nullptr;
+	shared_ptr<variable> finalSubVar = nullptr;
 
-	shared_ptr<expression> Exp = nullptr;
-	shared_ptr<expression> finalExp = nullptr;
+	shared_ptr<expression> nextExp = nullptr;
+	shared_ptr<expression> firstSubExp = nullptr;
+	shared_ptr<expression> finalSubExp = nullptr;
 
-	char operand;
+	char operand = ' ';
 };
+
+expression::expression() {}
 
 expression::expression(char* ch_arr) { //Allowed: t, any number, +, -, /, *, ^, (, )
 	while (*ch_arr != '\0') { // While there's still more string to traverse
@@ -63,8 +67,8 @@ expression::expression(char* ch_arr) { //Allowed: t, any number, +, -, /, *, ^, 
 			addVar(variable(false,strtod(ch_arr, &end)));
 			ch_arr = end;
 		}
-		else if (( *ch_arr == '+' || *ch_arr == '-' || *ch_arr == '*' || *ch_arr == '/' || *ch_arr == '^') && getFinalOperand() == ' ') {
-			setFinalOperand(*ch_arr);
+		else if (( *ch_arr == '+' || *ch_arr == '-' || *ch_arr == '*' || *ch_arr == '/' || *ch_arr == '^') && getFinalSubOperator() == ' ') { //Basic operators
+			setFinalSubOperator(*ch_arr);
 		}
 		else if (*ch_arr == '(') {
 			ch_arr++;
@@ -81,24 +85,77 @@ expression::expression(char* ch_arr) { //Allowed: t, any number, +, -, /, *, ^, 
 	}
 }
 
-void expression::addVar(variable var) {
-	auto temp = make_shared<variable>(var);
-	if (finalVar->getOperand() == ' ') {
-		finalVar->setOperand('*');
-	}
-	finalVar->setNextVar(temp);
-	finalVar = temp;
+expression::expression(expression& e) {
+	auto tempVar = e.firstSubVar;
+	auto tempExp = e.firstSubExp;
 
-	finalExp = nullptr;
+	while (!(tempVar==nullptr && tempExp == nullptr) && tempVar->getNextVar() != nullptr && tempExp->getNextExp() != nullptr) {
+		
+	}
 }
 
-void expression::addExp(expression exp) {
-	auto temp = make_shared<expression>(exp);
-	if (finalExp->getOperand() == ' ') {
-		finalExp->setOperand('*');
-	}
-	finalExp->setNextExp(temp);
-	finalExp = temp;
+expression expression::operator=(expression& e) {
+	return expression(e);
+}
 
-	finalVar = nullptr;
+void expression::addVar(variable var) {
+	auto temp = make_shared<variable>(var);
+	if (finalSubVar != nullptr) {
+		if (finalSubVar->getOperator() == ' ') {
+			finalSubVar->setOperator('*');
+		}
+		finalSubVar->setNextVar(temp);
+	}
+	else if (finalSubExp != nullptr) {
+		if (finalSubExp->getOperator() == ' ') {
+			finalSubExp->setOperator('*');
+		}
+		finalSubExp->setNextVar(temp);
+	}
+	finalSubVar = temp;
+	finalSubExp = nullptr;
+}
+
+void expression::addExp(expression var) {
+	auto temp = make_shared<expression>(var);
+	if (finalSubVar != nullptr) {
+		if (finalSubVar->getOperator() == ' ') {
+			finalSubVar->setOperator('*');
+		}
+		finalSubVar->setNextExp(temp);
+	}
+	else if (finalSubExp != nullptr) {
+		if (finalSubExp->getOperator() == ' ') {
+			finalSubExp->setOperator('*');
+		}
+		finalSubExp->setNextExp(temp);
+	}
+	finalSubExp = temp;
+	finalSubVar = nullptr;
+}
+
+char expression::getFinalSubOperator() const {
+	if (finalSubVar != nullptr) {
+		return finalSubVar->getOperator();
+	}
+	else if (finalSubExp != nullptr) {
+		return finalSubExp->getOperator();
+	}
+	return ' ';
+}
+
+void expression::setFinalSubOperator(const char ch) {
+	if (finalSubVar != nullptr) {
+		finalSubVar->setOperator(ch);
+	}
+	else if (finalSubExp != nullptr) {
+		finalSubExp->setOperator(ch);
+	}
+}
+void expression::setNextVar(shared_ptr<variable> var) {
+	nextVar = var;
+}
+
+void expression::setNextExp(shared_ptr<expression> var) {
+	nextExp = var;
 }

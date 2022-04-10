@@ -1,23 +1,18 @@
 #pragma once
 #include "expression.h"
-#include "utils.h"
-#include <memory>
-#include <string>
-
-using std::shared_ptr;
-using std::string;
 
 class function {
 public:
+	function();
 	function(string s);
 
-	void operator+(function f); // Add function to another
+	//void operator+(function f); // Add function to another
 
-	double operator()(double d); // Determine the value based on a parameter
+	//double operator()(double d); // Determine the value based on a parameter
 private:
-	expression val;
+	shared_ptr<expression> val = nullptr;
 };
 
 function::function(string s) {
-	val = expression(&s[0]);
+	val = make_shared<expression>(&s[0]);
 }

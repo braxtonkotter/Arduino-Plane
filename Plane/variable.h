@@ -1,16 +1,19 @@
 #pragma once
-#include "expression.h"
 #include "utils.h"
 #include <memory>
 #include <string>
+#include <math.h>
 
 using std::shared_ptr;
 using std::string;
+using std::make_shared;
+
+class expression;
 
 class variable {
 public:
 	variable() { val = 0; var = false; operand = ' '; }
-	variable(bool x, double v, char c = ' ') : val(v), var(x) {}
+	variable(bool x, double v, char c = ' ') : val(v), var(x), operand(c) {  }
 	variable(bool x, char c = ' ') : var(x), operand(c) { val = 0; }
 
 	/*variable operator+(expression e);
@@ -27,11 +30,14 @@ public:
 
 	shared_ptr<variable> operator()(double d) const;*/
 
-	void setOperand(const char ch) { operand = ch; }
-	char getOperand() const { return operand; }
+	void setOperator(const char ch) { operand = ch; }
+	char getOperator() const { return operand; }
 
 	void setNextVar(shared_ptr<variable> var);
 	void setNextExp(shared_ptr<expression> exp);
+
+	shared_ptr<variable> getNextVar() const { return nextVar; }
+	shared_ptr<expression> getNextExp() const { return nextExp; }
 
 	bool isVar() const { return var; }
 	double value() const { return val; }
@@ -39,7 +45,7 @@ private:
 	double val;
 	bool var;
 
-	char operand;
+	char operand = ' ';
 
 	shared_ptr<expression> nextExp = nullptr;
 	shared_ptr<variable> nextVar = nullptr;

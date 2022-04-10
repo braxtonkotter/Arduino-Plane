@@ -4,6 +4,7 @@
 
 #include "waypoint.h"
 #include "utils.h"
+#include "SpaceCurve.h" //Has all other headers included
 
 class plane {
 public:
