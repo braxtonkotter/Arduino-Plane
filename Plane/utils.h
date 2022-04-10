@@ -1,5 +1,6 @@
 #pragma once
-#include "function.h"
+
+class expression;
 
 struct Vector2 {
 	Vector2() {
@@ -47,11 +48,11 @@ struct polarCoordinate {
 };
 
 struct exponential {
-	string base;
-	string exp;
+	expression base;
+	expression exp;
 };
 
 struct fraction {
-	string numerator;
-	string denominator;
+	expression numerator;
+	expression denominator;
 };

@@ -1,3 +1,5 @@
 ﻿  PlaneFlying.cpp
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\expression.h(151,47): error C2660: 'expression::isolateParentheses': function does not take 2 arguments
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\expression.h(42,9): message : see declaration of 'expression::isolateParentheses'
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\utils.h(51,13): error C2079: 'exponential::base' uses undefined class 'expression'
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\utils.h(52,13): error C2079: 'exponential::exp' uses undefined class 'expression'
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\utils.h(56,13): error C2079: 'fraction::numerator' uses undefined class 'expression'
+C:\Users\ryste\OneDrive\Documents\Plane\Plane\utils.h(57,13): error C2079: 'fraction::denominator' uses undefined class 'expression'
