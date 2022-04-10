@@ -1,8 +1,12 @@
 #pragma once
 #include "function.h"
 
-struct coordinate {
-	coordinate(float a = 0, float b = 0) {
+struct Vector2 {
+	Vector2() {
+		x = 0;
+		y = 0;
+	}
+	Vector2(float a, float b) {
 		x = a;
 		y = b;
 	}
@@ -11,7 +15,12 @@ struct coordinate {
 };
 
 struct Vector3 {
-	Vector3(float a=0, float b=0, float c=0) {
+	Vector3() {
+		x = 0;
+		y = 0;
+		z = 0;
+	}
+	Vector3(float a, float b, float c) {
 		x = a;
 		y = b;
 		z = c;
@@ -22,7 +31,12 @@ struct Vector3 {
 };
 
 struct polarCoordinate {
-	polarCoordinate(float a=0, float b=0, float c=0) {
+	polarCoordinate() {
+		elevation = 0;
+		offset = 0;
+		distance = 0;
+	}
+	polarCoordinate(float a, float b, float c) {
 		elevation = a;
 		offset = b;
 		distance = c;

@@ -1,11 +1,5 @@
 #pragma once
 #include "expression.h"
-#include "utils.h"
-#include <memory>
-#include <string>
-
-using std::shared_ptr;
-using std::string;
 
 class function {
 public:
@@ -19,5 +13,5 @@ private:
 };
 
 function::function(string s) {
-	val = expression(&s[0]);
+	val = expression(s);
 }

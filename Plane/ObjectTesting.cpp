@@ -1,5 +1,5 @@
 #include "waypoint.h"
-#include "graph.h"
+#include "SpaceCurve.h"
 #include <iostream>
 #include <chrono>
 
