@@ -140,7 +140,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="expression.h" />
-    <ClInclude Include="fraction.h" />
     <ClInclude Include="function.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="utils.h" />

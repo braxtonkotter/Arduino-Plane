@@ -27,9 +27,6 @@
     <ClInclude Include="expression.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fraction.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="function.h">
       <Filter>Header Files</Filter>
     </ClInclude>

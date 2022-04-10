@@ -11,7 +11,7 @@ using std::make_shared;
 using std::to_string;
 using std::vector;
 
-const static string expLegalChars = "1234567890t()+-*/^"; // All legal characters in an expression. All numbers, 't', and all operators. Plus parentheses.
+const static string expLegalChars = "1234567890.t()+-*/^"; // All legal characters in an expression. All numbers, 't', and all operators. Plus parentheses.
 const static string operators = "+-*/^";
 
 class expression {
@@ -54,7 +54,8 @@ expression::expression() {
 
 expression::expression(string s) {
 	int parenthCnt = 0;
-	for (char c : s) {
+	for (int i = 0; i < s.length(); i++) {
+		char c = s[i];
 		if (expLegalChars.find(c) != string::npos) {
 			exp += c;
 			if (c == '(') {
@@ -72,6 +73,7 @@ expression::expression(string s) {
 	if (parenthCnt != 0) {
 		exp = "0";
 	}
+	simplify();
 }
 
 expression::expression(const expression& e) {

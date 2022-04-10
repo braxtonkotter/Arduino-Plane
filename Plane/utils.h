@@ -45,3 +45,13 @@ struct polarCoordinate {
 	float offset;
 	float distance;
 };
+
+struct exponential {
+	string base;
+	string exp;
+};
+
+struct fraction {
+	string numerator;
+	string denominator;
+};
