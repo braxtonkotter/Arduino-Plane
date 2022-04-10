@@ -23,6 +23,8 @@ public:
 	expression operator= (const expression & e);
 	void operator= (const string& s);
 
+	~expression() {}
+
 	// Used to combine two expressions together and make a new expression
 
 	expression operator+(const expression& e) const;
@@ -40,6 +42,7 @@ public:
 
 	void simplify(); // Starts the simplification process for the specific class
 	string simplify(string); // Combines like terms
+	vector<string> simplify(vector<string>);
 
 	bool singleTerm(const string); // Returns true if it's a single term
 
@@ -159,78 +162,69 @@ string expression::simplify(string s) {
 
 	string temp;
 	
-	for (int i = 0; i < s.length(); i++) { // Isolate all factors
+	for (int i = 0; i < s.length(); i++) { // Prepare the expression for the operations that follow
 		char c = s[i];
 
-		//Isolate factors first, scoping down if need be.
-
 		if (numericVal.find(c) != string::npos) { //If it's a numeric value, it can be standalone or as a coefficient
-			if (!temp.empty() && c != '.') { //If there is a value and we're not dealing with a decimal
-				if (temp.back()=='t') { // If the 
-
-				}
-			}
 			if (c == '.') { //If it's a decimal, make sure it's properly used
 				if (temp.empty()) {
 					temp += '0'; //Add a zero if the decimal is the first value.
 				}
 				else { // If there's already a value 
-					if (numericVal.find(temp.back()) == string::npos) { // If the most recent factor wasn't a number
-						temp += '*';
-						factors.push_back(temp);
-						temp = c;
+					if (temp.find('.') != string::npos) { //If the number already has a decimal point, ignore this one.
 						continue;
-					}
-					bool flag = 0;
-					for (char ch : temp) {
-						if (ch == '.') {
-							flag = 1;
-							break;
-						}
-					}
-					if (flag) {
-						continue; //Skip adding the decimal if there's already one.
 					}
 				}
 			}
-			temp += c;
-			if (i < s.length() - 1 && s[i + 1] == 't') { //If there is a next character and it's a variable, we factor it as a coefficient and variable.
-				i++;
-				temp += s[i];
-				factors.push_back(temp);
-				temp = "";
-			}
+			temp += c; //Add the value
 		}
 		else if (c == 't') { //If it's a variable value
 			if (!temp.empty()) { //If there's another item before it
-				if (temp.back() == '.') {
+				if (temp.back() == '.') { //For syntax reasons
 					temp.pop_back(); //Remove the decimal
 				}
 				temp += "*";
 				factors.push_back(temp);
-				temp = c;
+				temp = "";
 			}
-		}
-		else if (c == '(') {
-			if (!temp.empty()) {
-				if (operators.find(temp.back()) == string::npos) {
-					temp += "*";
-				}
-				if (i < s.length()) {
-					temp += simplify(s.substr(i + 1)); //Get the rest of the string;
-				}
-			}
-		}
-		else if (c == ')') {
-			temp += c;
-			break;
+			temp += c; //Add the variable
 		}
 		else if (operators.find(c) != string::npos) { // If it's an operator
+			if (c == '(' || c == ')') { //If we're dealing with a parenthesis, it'll be 5(x), 10+2(3+x). Split up into 5* ( x ), 10+ 2 * ( 3+ x )
+				if (!temp.empty()) { //If there's a number before the operator, add a multiplication symbol, then clear.
+					temp += '*';
+					factors.push_back(temp);
+					temp = ""; //Clear the current string
+				}
+			}
+			temp += c; // Add the operator. Parentheses will be alone.
 			factors.push_back(temp);
+			temp = "";
 		}
 	}
 
+	//Math now
+
+	factors = simplify(factors);
+
+	for (string s : factors) {
+		newExpr += s;
+	}
+
 	return newExpr;
+}
+
+vector<string> expression::simplify(vector<string> expr) {
+
+	//Combine like terms. Follow PEMDAS
+
+	vector<string>::iterator ptr;
+
+	for (ptr = expr.begin(); ptr < expr.end(); ptr++;) {
+		if ((*ptr)[0] == '(') {
+
+		}
+	}
 }
 
 void expression::simplify() {

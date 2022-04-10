@@ -48,11 +48,19 @@ struct polarCoordinate {
 };
 
 struct exponential {
-	expression base;
-	expression exp;
+	~exponential() {
+		delete base;
+		delete exp;
+	}
+	expression* base;
+	expression* exp;
 };
 
 struct fraction {
-	expression numerator;
-	expression denominator;
+	~fraction() {
+		delete numerator;
+		delete denominator;
+	}
+	expression* numerator;
+	expression* denominator;
 };

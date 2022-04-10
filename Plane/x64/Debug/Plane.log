@@ -1,5 +1,1 @@
-﻿  PlaneFlying.cpp
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\utils.h(51,13): error C2079: 'exponential::base' uses undefined class 'expression'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\utils.h(52,13): error C2079: 'exponential::exp' uses undefined class 'expression'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\utils.h(56,13): error C2079: 'fraction::numerator' uses undefined class 'expression'
-C:\Users\ryste\OneDrive\Documents\Plane\Plane\utils.h(57,13): error C2079: 'fraction::denominator' uses undefined class 'expression'
+﻿  Plane.vcxproj -> C:\Users\ryste\OneDrive\Documents\Plane\x64\Debug\Plane.exe
