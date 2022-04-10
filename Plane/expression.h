@@ -43,40 +43,20 @@ public:
 	void simplify(); // Starts the simplification process for the specific class
 	string simplify(string); // Combines like terms
 
-	bool singleTerm(const string); // Returns true if it's a single term
-
 	double operator()(double); // Solve the expression with a variable number
 private:
-	string formatEquation(string);
+	void formatEquation();
 
 	string exp;
 };
 
 expression::expression() {
-	exp = "";
+	exp = "1";
 }
 
 expression::expression(string s) {
-	int parenthCnt = 0;
-	for (int i = 0; i < s.length(); i++) {
-		char c = s[i];
-		if (expLegalChars.find(c) != string::npos) {
-			exp += c;
-			if (c == '(') {
-				parenthCnt++;
-			}
-			else if (c == ')') {
-				parenthCnt--;
-			}
-		}
-		if (parenthCnt < 0) {
-			exp = "0";
-			break;
-		}
-	}
-	if (parenthCnt != 0) {
-		exp = "0";
-	}
+	exp = s;
+	formatEquation();
 	simplify();
 }
 
@@ -89,7 +69,8 @@ expression expression::operator=(const expression& e) {
 }
 
 void expression::operator=(const string& s) {
-	*this = expression(s);
+	this->exp = s;
+	formatEquation();
 }
 
 expression expression::operator+(const expression& e) const {
@@ -153,16 +134,41 @@ double expression::operator()(double param) {
 	return strtod(it,&c);
 }
 
-string expression::simplify(string s) {
-	
-	//Loop of combination of like terms followed by PEMDAS
+string expression::simplify(string s) { // Needed to nest
 
-	//Math now
+	char* ptr; //Pointer to the characters in the string
 
-	char* ptr = &newExpr[0]; //Pointer to 
+	string ans; //Factor 
 
-	for (string s : factors) {
-		newExpr += s;
+	string exp1; // Holder for an isolated factor
+	string exp2; // Factor in the process of being isolated
+
+	for (ptr = &exp[0]; *ptr != string::npos; ptr++) { //Do until there's no more string.
+		while (operators.find(*ptr) == string::npos) { exp2 += *ptr; ptr++; } //Find the next operator
+
+		if (*ptr == '(') { //Find the matching parenthesis, and make a string of the value(s) between. P
+			char* ptr2;
+			int pCnt = 1;
+			for (ptr2 = ptr + 1; *ptr2 != string::npos; ptr2++) { //Find the matching
+				if (*ptr2 == '(') {
+					pCnt++;
+				}
+				else if (*ptr2 == ')') {
+					pCnt--;
+				}
+
+				if (pCnt == 0) {
+					break;
+				}
+			}
+		}
+
+		if (exp1.empty()) { //If there is no first factor
+			exp1 = exp2;
+		}
+		else { // This is where the math happens
+
+		}
 	}
 
 	delete ptr;
@@ -171,26 +177,19 @@ string expression::simplify(string s) {
 }
 
 void expression::simplify() {
-	exp = formatEquation(exp);
 	exp = simplify(exp);
 }
 
-bool expression::singleTerm(const string s) {
-	for (char c : operators) {
-		if (exp.find(c) != string::npos) {
-			return false;
-		}
-	}
-	return true;
-}
+void expression::formatEquation() {
 
-string expression::formatEquation(string s) {
 	string newExpr;
 
 	string temp;
 
-	for (int i = 0; i < s.length(); i++) { // Prepare the expression for the operations that follow
-		char c = s[i];
+	int parenthesisCnt = 0;
+
+	for (int i = 0; i < exp.length(); i++) { // Prepare the expression for the operations that follow
+		char c = exp[i];
 
 		if (numericVal.find(c) != string::npos) { //If it's a numeric value, it can be standalone or as a coefficient
 			if (c == '.') { //If it's a decimal, make sure it's properly used
@@ -218,6 +217,10 @@ string expression::formatEquation(string s) {
 		}
 		else if (operators.find(c) != string::npos) { // If it's an operator
 			if (c == '(' || c == ')') { //If we're dealing with a parenthesis, it'll be 5(x), 10+2(3+x). Split up into 5* ( x ), 10+ 2 * ( 3+ x )
+				parenthesisCnt += (c == '(') ? 1 : -1;
+				if (parenthesisCnt < 0) { //Parenthesis balancing
+					newExpr = '(' + newExpr;
+				}
 				if (!temp.empty()) { //If there's a number before the operator, add a multiplication symbol, then clear.
 					temp += '*';
 					newExpr += temp;
@@ -230,5 +233,5 @@ string expression::formatEquation(string s) {
 		}
 	}
 
-	return newExpr;
+	exp = newExpr;
 }
