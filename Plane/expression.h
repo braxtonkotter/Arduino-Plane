@@ -55,12 +55,12 @@ public:
 	string getExp() const { return exp; }
 
 	void simplify(); // Starts the simplification process for the specific class
-	string simplify(string); // Combines like terms
 
-	double operator()(double); // Solve the expression with a variable number
+	double operator()(const double); // Solve the expression with a variable number
 private:
 	void formatExpression();
-	string getParenthesisStatement(char*, char**);
+	string getFactor(char*);
+	string simplify(char*); // Combines like terms
 
 	string exp;
 };
@@ -152,84 +152,74 @@ bool expression::operator==(double d) {
 	return false;
 }
 
-double expression::operator()(double param) {
-	const string sParam = to_string(param);
+double expression::operator()(const double param) {
 	string temp;
-	char* c;
-	for (auto& c : exp) {
-		if (c == 't') {
-			temp += '(' + sParam + ')';
+	char* c = &exp[0];
+
+	while (*c != string::npos) { //Until the end of the xpression
+		if (*c == 't') {
+			temp += param;
 		}
 		else {
-			temp += c;
+			temp += *c;
 		}
+		c++;
 	}
 
-	string simpli = simplify(temp);
-
-	char* it = &simpli[0];
-	double ret = strtod(it,&c);
+	double ret = strtod(&simplify(&temp[0])[0], &c);
 
 	delete c;
-	delete it;
 
 	return ret;
 }
 
-string expression::simplify(string s) { // Needed to nest
+string expression::simplify(char* ch) { // Needed to nest
 
 	string simplified;
 	string temp;
 
-	for (auto& c : s) { // For every character in the expression
-		if (operators.find(c) == string::npos) { //Iterate until we get an operator, storing the numbers as they come
-			temp += c;
-			continue;
-		}
+	while (*ch != string::npos) { //Until the end of hte expression is reached
 
-		//temp contains a number and c is an operator
-
-		if (c == '(') {
-			temp = simplify(&c); // Nest one character further
-		}
 	}
 
 	return simplified;
 }
 
-string expression::getParenthesisStatement(char* c,char** ptr) { //Hand me an expression starting with an open parenthisis. I change your first pointer!
+string expression::getFactor(char* c) { //Hand me an operand and an expression! I will return as if multiplying or dividing otherwise!
 	string ret;
 
-	int pCnt = 1;
+	const bool pStart = *c == '('; // If we started with an open parenthesis
+	c += pStart; // Move to the next one if so
+	int pCnt = pStart;
 
-	for (c++; *c != string::npos; c++) { //Start after our first character
-		if (*c == '(') {
+	while (*c != string::npos) { //While we haven't hit the end of the string
+		pCnt += (*c == '(' || *c == ')') ? (*c == '(') ? 1 : -1 : 0; // Add parenthesis count;
+		if (pCnt == 0) { // If parentheses are balanced, we can terminate
+			if (pStart) { //Don't add the final parenthesis pair
+				break; 
+			}
+			if (operators.find(*c) != string::npos) { // If we're encountering a possible other factor
+				if (pStart || (*c != '+' && *c != '-')) { // Ignore the final parenthesis if we started with one, or stop if it stops the factor
+					break;
+				}
+				
+			}
+		}
+		else if (pCnt < 0) { //Skip the end parenthesis
 			pCnt++;
+			continue;
 		}
-		else if (*c == ')') {
-			pCnt--;
-		}
-
-		if (pCnt > 0) {
-			ret += *c;
-		}
-		else { //Break when we've equalized our parentheses
-			break;
-		}
+		ret += c;
+		c++;
 	}
 
-	for (int i = 0; i < pCnt; i++) {
-		ret += ')';
-	}
-
-	c++; //Move past the final parenthesis
-	*ptr = c; //Where did we end?
+	c++; //Move past the final value (an operator or a parenthesis
 
 	return ret;
 }
 
 void expression::simplify() {
-	exp = simplify(exp);
+	exp = simplify(&exp[0]);
 }
 
 void expression::formatExpression() {
