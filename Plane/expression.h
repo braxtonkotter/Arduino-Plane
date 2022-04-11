@@ -45,7 +45,8 @@ public:
 
 	double operator()(double); // Solve the expression with a variable number
 private:
-	void formatEquation();
+	void formatExpression();
+	string getNextFactor(char*, char**);
 
 	string exp;
 };
@@ -56,7 +57,7 @@ expression::expression() {
 
 expression::expression(string s) {
 	exp = s;
-	formatEquation();
+	formatExpression();
 	simplify();
 }
 
@@ -70,7 +71,7 @@ expression expression::operator=(const expression& e) {
 
 void expression::operator=(const string& s) {
 	this->exp = s;
-	formatEquation();
+	formatExpression();
 }
 
 expression expression::operator+(const expression& e) const {
@@ -119,68 +120,80 @@ void expression::operator/=(const expression& e) {
 }
 
 double expression::operator()(double param) {
-	string temp = exp;
-	for (int i = 0; i < temp.length(); i++) {
-		char c = temp[i];
-		if (c == 't') {
-			temp.replace(i, 1, "(" + to_string(param) + ")"); // Replaces all variables with the parameter
-			i += 2;
+	const string sParam = to_string(param);
+	string temp;
+	char* c;
+	for (c = &exp[0]; *c != string::npos; c++) {
+		if (*c == 't') {
+			temp += '(' + sParam + ')';
+		}
+		else {
+			temp += *c;
 		}
 	}
+	c = nullptr;
 
 	string simpli = simplify(temp);
+
 	char* it = &simpli[0];
-	char* c;
-	return strtod(it,&c);
+	double ret = strtod(it,&c);
+
+	delete c;
+	delete it;
+
+	return ret;
 }
 
 string expression::simplify(string s) { // Needed to nest
 
-	char* ptr; //Pointer to the characters in the string
+	string newExp;
 
-	string ans; //Factor 
+	char* bkmark; //Pointer to the characters in the string
+	char* ptr;
 
-	string exp1; // Holder for an isolated factor
-	string exp2; // Factor in the process of being isolated
+	string temp;
 
-	for (ptr = &exp[0]; *ptr != string::npos; ptr++) { //Do until there's no more string.
-		while (operators.find(*ptr) == string::npos) { exp2 += *ptr; ptr++; } //Find the next operator
+	// Multiplication & Division (parentheses handled within)
+	for (bkmark = &s[0]; *bkmark != string::npos; bkmark++) {
+		string temp = getNextFactor(bkmark, &ptr);
 
-		if (*ptr == '(') { //Find the matching parenthesis, and make a string of the value(s) between. P
-			char* ptr2;
-			int pCnt = 1;
-			for (ptr2 = ptr + 1; *ptr2 != string::npos; ptr2++) { //Find the matching
-				if (*ptr2 == '(') {
-					pCnt++;
-				}
-				else if (*ptr2 == ')') {
-					pCnt--;
-				}
-
-				if (pCnt == 0) {
-					break;
-				}
-			}
-		}
-
-		if (exp1.empty()) { //If there is no first factor
-			exp1 = exp2;
-		}
-		else { // This is where the math happens
+		if (*ptr == '*') {
 
 		}
 	}
 
-	delete ptr;
+	s = newExp;
+	// Addition
+	// Subtraction
 
-	return newExpr;
+	delete ptr;
+}
+
+string expression::getNextFactor(char* it, char** ptr) {
+	string ret;
+
+	do {
+		if (*it == '(') {
+			it++;
+			continue;
+		}
+		else if (*it == ')') {
+			break;
+		}
+		ret += *it;
+		it++;
+	} while (operators.find(*it) == string::npos);
+
+	*ptr = it;
+
+	return ret;
 }
 
 void expression::simplify() {
 	exp = simplify(exp);
 }
 
-void expression::formatEquation() {
+void expression::formatExpression() {
 
 	string newExpr;
 
