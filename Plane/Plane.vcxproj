@@ -139,14 +139,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="dimension.h" />
-    <ClInclude Include="graph.h" />
+    <ClInclude Include="fraction.h" />
+    <ClInclude Include="maths.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="waypoint.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ObjectTesting.cpp" />
+    <ClCompile Include="ObjectTesting.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <DeploymentContent>false</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="PlaneFlying.cpp" />
+    <ClCompile Include="variable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

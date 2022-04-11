@@ -1,6 +1,6 @@
-﻿  ObjectTesting.cpp
-C:\Users\ryste\source\CS2420\Plane\Plane\waypoint.h(89,52): warning C4244: 'return': conversion from 'const double' to 'float', possible loss of data
-C:\Users\ryste\source\CS2420\Plane\Plane\waypoint.h(90,55): warning C4244: 'return': conversion from 'const double' to 'float', possible loss of data
-C:\Users\ryste\source\CS2420\Plane\Plane\waypoint.h(91,54): warning C4244: 'return': conversion from 'const double' to 'float', possible loss of data
-C:\Users\ryste\source\CS2420\Plane\Plane\ObjectTesting.cpp(49,36): warning C4305: 'argument': truncation from 'double' to 'float'
-  Plane.vcxproj -> C:\Users\ryste\source\CS2420\Plane\x64\Debug\Plane.exe
+﻿  PlaneFlying.cpp
+PlaneFlying.obj : error LNK2019: unresolved external symbol "public: __cdecl expression::expression(void)" (??0expression@@QEAA@XZ) referenced in function "public: __cdecl function::function(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (??0function@@QEAA@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)
+PlaneFlying.obj : error LNK2019: unresolved external symbol "public: void __cdecl expression::setNextExp(class std::shared_ptr<class expression>)" (?setNextExp@expression@@QEAAXV?$shared_ptr@Vexpression@@@std@@@Z) referenced in function "private: void __cdecl expression::addExp(class expression)" (?addExp@expression@@AEAAXV1@@Z)
+PlaneFlying.obj : error LNK2019: unresolved external symbol "private: void __cdecl expression::setFinalOperand(char)" (?setFinalOperand@expression@@AEAAXD@Z) referenced in function "public: __cdecl expression::expression(char *)" (??0expression@@QEAA@PEAD@Z)
+PlaneFlying.obj : error LNK2019: unresolved external symbol "private: char __cdecl expression::getFinalOperand(void)const " (?getFinalOperand@expression@@AEBADXZ) referenced in function "public: __cdecl expression::expression(char *)" (??0expression@@QEAA@PEAD@Z)
+C:\Users\ryste\OneDrive\Documents\Plane\x64\Debug\Plane.exe : fatal error LNK1120: 4 unresolved externals

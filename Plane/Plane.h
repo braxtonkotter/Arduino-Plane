@@ -1,18 +1,32 @@
 #pragma once
+
+#include <chrono>
+
 #include "waypoint.h"
+#include "maths.h"
 #include "utils.h"
-#include "graph.h"
 
 class plane {
 public:
 	plane();
 
+	Vector3 getPosition() { return pos; }
+	Vector3 getOrientation() { return orientation; }
+
+	void setTarget(Vector3 trg) { target = trg; flightplan(); }
+
 	void fly(); //Send information to the arduino for an action. Built upon flight path.
 private:
 
-	Object home; //Home point. Determine plane stats based on this
-	Object target; //Target point. Fly to here.
-	Object theplane; //The plane.
+	void flightplan();
+	bool plausibility();
+	int safety();
+
+	const Vector3 home = Vector3(0,0,0); //Home point. Determine plane stats based on this
+	Vector3 target = Vector3(0,0,0); //Target point. Fly to here.
+	Vector3 pos = Vector3(0,0,0);
+	Vector3 orientation = Vector3(0, 0, 0);
+	const Vector3 size = Vector3(0,0,0);
 	
 	waypoint w1 = waypoint(0, 0, 1); // 0-1
 	waypoint w2 = waypoint(0, 0, 2); // 1-2
@@ -25,9 +39,9 @@ private:
 	waypoint w9 = waypoint(0, 0, 30); //20-30
 	waypoint w10 = waypoint(0, 0, 40); //30-40
 
-	graph<Vector3> flightPath; //Vector3 points of the flight path.
+	//SpaceCurve flightPath; // Space Curve of the flight path
 };
 
 plane::plane() {
-	flightPath = graph<Vector3>(0.01); //Sets flight path increments to 1 centimeter
+	
 }
