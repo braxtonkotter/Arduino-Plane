@@ -46,21 +46,3 @@ struct polarCoordinate {
 	float offset;
 	float distance;
 };
-
-struct exponential {
-	~exponential() {
-		delete base;
-		delete exp;
-	}
-	expression* base;
-	expression* exp;
-};
-
-struct fraction {
-	~fraction() {
-		delete numerator;
-		delete denominator;
-	}
-	expression* numerator;
-	expression* denominator;
-};
