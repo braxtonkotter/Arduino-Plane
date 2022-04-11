@@ -36,7 +36,7 @@ struct Plane_Values{
 };
 struct Plane_Values fromRadio;
 
-int defaultServoAngle = 0; //AKA Trim
+int defaultServoAngle = -10; //AKA Trim
  
 void setup() {
   //Computer Output Start
@@ -55,6 +55,7 @@ void setup() {
 void loop() {
    //Set Current Time
    currentTime = millis();
+   
    //activate failsafe function if disconnected for 1 sec
    if(currentTime - lastRecieveTime > 1000){
     failsafe();
@@ -63,22 +64,22 @@ void loop() {
    if(radio.available()){
     radio.read(&fromRadio, sizeof(fromRadio));
     lastRecieveTime = millis();
-    Serial.println(fromRadio.motorSpeed);
-    //Serial.println(String(defaultServoAngle + fromRadio.leftServoRotation) + ", " + String(defaultServoAngle + fromRadio.rightServoRotation));
+    //Serial.println(fromRadio.motorSpeed);
+    Serial.println(String(fromRadio.leftServoRotation) + ", " + String(fromRadio.rightServoRotation));
    }
    //Motor & servo movements   
    Motor.writeMicroseconds(fromRadio.motorSpeed);
-   rightWing.write(defaultServoAngle + fromRadio.rightServoRotation);
-   leftWing.write(defaultServoAngle + fromRadio.leftServoRotation);
+   rightWing.write(fromRadio.rightServoRotation);
+   leftWing.write(fromRadio.leftServoRotation);
 }
 
 //Set all values to 0 if disconnected
 void failsafe(){
   Serial.println("...Failsafe Engaged...");
-  Motor.write(0);
+  fromRadio.motorSpeed = 1000;
   Serial.println("Motor Value @ 0");
-  rightWing.write(defaultServoAngle);
+  fromRadio.rightServoRotation = 90;
   Serial.println("Right Wing Reset");
-  leftWing.write(defaultServoAngle);
+  fromRadio.leftServoRotation = 90;
   Serial.println("Left Wing Reset");
  }

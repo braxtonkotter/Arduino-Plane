@@ -13,7 +13,7 @@
 
 #define MOTOR_PIN 0
 #define PITCH_PIN 2
-#define ROLL_PIN 1
+#define ROLL_PIN 3
 
 //creates radio object
 RF24 radio(7, 8); // CE, CSN
@@ -38,13 +38,10 @@ int defaultMotorMotion;
 int defaultPitchMotion;
 int defaultRollMotion;
 
-//Servo default values
-int defaultServoAngle = 0; //AKA Trim
-
 //function to run on start
 void setup() {
   //Set zero point
-  defaultMotorMotion = analogRead(MOTOR_PIN);
+  defaultMotorMotion = 0; //change when I get Accelerometer
   defaultPitchMotion = analogRead(PITCH_PIN);
   defaultRollMotion = analogRead(ROLL_PIN);
 
@@ -68,49 +65,49 @@ void setup() {
 void loop() {
   motorMotion = analogRead(MOTOR_PIN) - defaultMotorMotion;
   //get the value of the joystick
-  toRadio.motorSpeed = map(motorMotion, 17, 90, 1000, 2000);
-  Serial.println(toRadio.motorSpeed);
+  toRadio.motorSpeed = map(motorMotion, 512, 1023, 1000, 2000);
   ServoValues();
-
-  //write to the radio pipeline the struct Send
+  
+  //write to the radio pipeline the struct toRadio
   radio.write(&toRadio, sizeof(toRadio));
 
   //print the joystick value to the terminal (Serial)
   //Serial.println(toRadio.motorSpeed);
-  //Serial.println(analogRead(2));
   //Serial.println(String(toRadio.rightServoRotation) + ", " + String(toRadio.leftServoRotation));
 }
 
 void ServoValues() {
-  pitchValue = analogRead(PITCH_PIN) - defaultPitchMotion; //min -55 max 90
-  rollValue = analogRead(ROLL_PIN) - defaultRollMotion; //min -70 max 50
+  pitchValue = analogRead(PITCH_PIN) - defaultPitchMotion; //min -55 max 70
+  rollValue = analogRead(ROLL_PIN) - defaultRollMotion; //min -70 max 70
   //Serial.println(String(pitchValue) + ", " + String(rollValue));
 
   //if right
-  if (rollValue > -10) {
-    pitchValue = map(pitchValue, -55, 90, 45, 135) + defaultServoAngle;
-    rollValue = map(rollValue, -10, 50, 0, 45) + defaultServoAngle;
-
+  if (rollValue > 10) {
+    Serial.println("Right");
+    pitchValue = map(pitchValue, -55, 70, 45, 135);
+    rollValue = map(rollValue, 10, 70, 0, 45);
     //right servo = pitchValue + rollValue
-    toRadio.rightServoRotation = pitchValue + rollValue;
+    toRadio.rightServoRotation = pitchValue + rollValue-10;
     //left servo = pitchValue-rollValue
-    toRadio.leftServoRotation = pitchValue - rollValue;
+    toRadio.leftServoRotation = pitchValue - rollValue+7;
     toRadio.leftServoRotation = map(toRadio.leftServoRotation, 0, 180, 180, 0);
   }
   //if left
-  else if (rollValue < -15) {
-    pitchValue = map(pitchValue, -55, 90, 45, 135) + defaultServoAngle;
-    rollValue = map(rollValue, -70, -12, 45, 0) + defaultServoAngle;
+  else if (rollValue < -10) {
+    Serial.println("Left");
+    pitchValue = map(pitchValue, -55, 70, 45, 135);
+    rollValue = map(rollValue, -70, -10, 45, 0);
     //right servo = pitchValue - rollValue
-    toRadio.rightServoRotation = pitchValue - rollValue;
+    toRadio.rightServoRotation = pitchValue - rollValue-10;
     //left servo = pitchValue + rollValue
-    toRadio.leftServoRotation = pitchValue + rollValue;
+    toRadio.leftServoRotation = pitchValue + rollValue+7;
 
     toRadio.leftServoRotation = map(toRadio.leftServoRotation, 0, 180, 180, 0);
   }
-  //if 518
-  else if (rollValue > -15 || rollValue < -10) {
-    toRadio.rightServoRotation = map(pitchValue, -55, 90, 45, 135) + defaultServoAngle;
-    toRadio.leftServoRotation = map(pitchValue, -55, 90, 135, 45) - 35 + defaultServoAngle;
+  //if 518..
+  else if (rollValue > -10 || rollValue < 10) {
+    Serial.println("Center");
+    toRadio.rightServoRotation = map(pitchValue, -55, 90, 45, 135)-10;
+    toRadio.leftServoRotation = map(pitchValue, -55, 90, 135, 45)+7;
   }
 }
