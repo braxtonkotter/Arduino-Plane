@@ -33,7 +33,7 @@ public:
 	expression(const string s);
 	expression(const expression& e);
 	expression operator= (const expression & e);
-	void operator= (const string& s);
+	void operator= (const string s);
 
 	~expression() {}
 
@@ -53,34 +53,27 @@ public:
 	bool operator==(const expression& e); // Determines if the two expressions are equal
 	bool operator==(double d);
 
-	string getExp() const { return exp; }
+	string getExp() const;
 
 	void simplify(); // Starts the simplification process for the specific class
 
 	double operator()(const double); // Solve the expression with a variable number
 private:
-	void formatExpression();
+	vector<string> formatExpression(string s);
 	string getFactor(char*);
 	string simplify(char*); // Combines like terms
 
-	string add(string, string);
-	string subtract(string, string);
-	string multiply(string, string);
-	string divide(string, string);
-	string exp(string, string);
-
 	vector<string> splitExpression(string);
 
-	string exp;
+	vector<string> exp;
 };
 
 expression::expression() {
-	exp = "1";
+	exp.push_back("1");
 }
 
 expression::expression(string s) {
-	exp = s;
-	formatExpression();
+	exp = formatExpression(s);
 	simplify();
 }
 
@@ -92,53 +85,48 @@ expression expression::operator=(const expression& e) {
 	return expression(e);
 }
 
-void expression::operator=(const string& s) {
-	this->exp = s;
-	formatExpression();
+void expression::operator=(const string s) {
+	exp = formatExpression(s);
 }
 
 expression expression::operator+(const expression& e) const {
-	string ret = "(" + this->exp + ")+(" + e.exp + ")";
-	return expression(ret);
+	return expression("(" + getExp() + ")+(" + e.getExp() + ")");
 }
 
 expression expression::operator-(const expression& e) const {
-	string ret = "(" + this->exp + ")-(" + e.exp + ")";
-	return expression(ret);
+	return expression("(" + getExp() + ")-(" + e.getExp() + ")");
+
 }
 
 expression expression::operator*(const expression& e) const {
-	string ret = "(" + this->exp + ")*(" + e.exp + ")";
-	return expression(ret);
+	return expression("(" + getExp() + ")*(" + e.getExp() + ")");
 }
 
 expression expression::operator/(const expression& e) const {
-	string ret = "(" + this->exp + ")/(" + e.exp + ")";
-	return expression(ret);
+	return expression("(" + getExp() + ")/(" + e.getExp() + ")");
 }
 
 expression expression::operator^(const expression& e) const {
-	string ret = "(" + this->exp + ")^(" + e.exp + ")";
-	return expression(ret);
+	return expression("(" + getExp() + ")^(" + e.getExp() + ")");
 }
 
 void expression::operator+=(const expression& e){
-	this->exp = "(" + this->exp + ")+(" + e.exp + ")";
+	this->exp = formatExpression("(" + getExp() + ")+(" + e.getExp() + ")");
 	simplify();
 }
 
 void expression::operator-=(const expression& e) {
-	this->exp = "(" + this->exp + ")-(" + e.exp + ")";
+	this->exp = formatExpression("(" + getExp() + ")-(" + e.getExp() + ")");
 	simplify();
 }
 
 void expression::operator*=(const expression& e) {
-	this->exp = "(" + this->exp + ")*(" + e.exp + ")";
+	this->exp = formatExpression("(" + getExp() + ")*(" + e.getExp() + ")");
 	simplify();
 }
 
 void expression::operator/=(const expression& e) {
-	this->exp = "(" + this->exp + ")/(" + e.exp + ")";
+	this->exp = formatExpression("(" + getExp() + ")/(" + e.getExp() + ")");
 	simplify();
 }
 
