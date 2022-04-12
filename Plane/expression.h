@@ -13,6 +13,7 @@ using std::vector;
 
 const static string expLegalChars = "1234567890.t()+-*/^"; // All legal characters in an expression. All numbers, 't', and all operators. Plus parentheses.
 const static string operators = "+-*/^";
+const static string numerals = "1234567890.";
 
 class expression;
 
@@ -61,6 +62,14 @@ private:
 	void formatExpression();
 	string getFactor(char*);
 	string simplify(char*); // Combines like terms
+
+	string add(string, string);
+	string subtract(string, string);
+	string multiply(string, string);
+	string divide(string, string);
+	string exp(string, string);
+
+	vector<string> splitExpression(string);
 
 	string exp;
 };
@@ -173,12 +182,31 @@ double expression::operator()(const double param) {
 	return ret;
 }
 
+vector<string> expression::splitExpression(string str) { //Splits an expression into 123 t +* etc
+	vector<string> ret;
+
+	string temp;
+
+	for (char& ch : str) {
+		
+	}
+
+	delete lib;
+
+	return ret;
+}
+
+string expression::add(string e1, string e2) { //We're given two strings like 5+x , 10*x. We make two vectors like 5 + x , 10 x
+	vector<string> l1 = splitExpression(e1);
+	vector<string> l2 = splitExpression(e2);
+}
+
 string expression::simplify(char* ch) { // Needed to nest
 
 	string simplified;
 	string temp;
 
-	while (*ch != string::npos) { //Until the end of hte expression is reached
+	while (*ch != string::npos) { //Until the end of the expression is reached
 
 	}
 
@@ -196,24 +224,19 @@ string expression::getFactor(char* c) { //Hand me an operand and an expression! 
 		pCnt += (*c == '(' || *c == ')') ? (*c == '(') ? 1 : -1 : 0; // Add parenthesis count;
 		if (pCnt == 0) { // If parentheses are balanced, we can terminate
 			if (pStart) { //Don't add the final parenthesis pair
+				c++; //In fact, go one further
 				break; 
 			}
-			if (operators.find(*c) != string::npos) { // If we're encountering a possible other factor
-				if (pStart || (*c != '+' && *c != '-')) { // Ignore the final parenthesis if we started with one, or stop if it stops the factor
-					break;
-				}
-				
+			else if (*c != '+' && *c != '-') { // Stop if this factor is added to or subtracts another
+				break;
 			}
 		}
-		else if (pCnt < 0) { //Skip the end parenthesis
-			pCnt++;
-			continue;
+		else if (pCnt < 0) { // If there was another parenthesis beyond the end
+			break;
 		}
 		ret += c;
 		c++;
 	}
-
-	c++; //Move past the final value (an operator or a parenthesis
 
 	return ret;
 }
